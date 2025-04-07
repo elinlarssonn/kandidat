@@ -6,8 +6,9 @@ function App() {
     <div className="App">
       <header className="App-header">
         <img src={logo} className="App-logo" alt="logo" />
-        <p>
+        <p style={{ color: 'green' }}>
           Edit <code>src/App.js</code> and save to reload.
+          Hej hej
         </p>
         <a
           className="App-link"
