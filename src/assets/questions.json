@@ -1,0 +1,32 @@
+[
+    {
+        "id": 1,
+        "question": "Vad är ditt främsta mål med att delta på eventet? Välj max 3 alternativ",
+        "options": ["Hitta jobb", "Rekrytera", "Nya kunder", "Hitta samarbetspartners", "Bli inspererad", "Starta ett projekt", "Träffa nya kontakter", "Inget av ovanstående"]
+    },
+    {
+        "id": 2,
+        "question": "Vilken typ av personer är du mest intresserad av att prata med? Välj max 3 alternativ",
+        "options": ["Folk med liknande yrkesroll", "Seniora yrkespersoner/mentorer", "Studenter", "Nyexaminerade studenter", "Entreprenörer/startups", "Rekryterare", "VD", "Ingen särskild"]
+    },
+    {
+        "id": 3,
+        "question": "Vilken bransch jobbar du i?",
+        "options": ["Tech & IT", "Kreativa & kulturella näringar", "Utbildning & forskning", "Hälso- & sjukvård", "Ekonomi, finans & juridik", "Startups & entreprenörskap", "Offentlig sektor & myndigheter", "Industri & produktion", "Energi & miljö", "Handel & e-handel", "Turism, hotell & restaurang", "Transport & logistik", "HR & rekrytering", "Bygg & fastighet", "Arbetslös"]
+    },
+    {
+        "id": 4,
+        "question": "Vilken bransch vill du hitta personer inom? Välj max 3 alternativ",
+        "options": ["Tech & IT", "Kreativa & kulturella näringar", "Utbildning & forskning", "Hälso- & sjukvård", "Ekonomi, finans & juridik", "Startups & entreprenörskap", "Offentlig sektor & myndigheter", "Industri & produktion", "Energi & miljö", "Handel & e-handel", "Turism, hotell & restaurang", "Transport & logistik", "HR & rekrytering", "Bygg & fastighet", "Arbetslös"]
+    },
+    {
+        "id": 5,
+        "question": "Vilka kompetenser använder du mest i ditt nuvarande jobb? Välj max 3 alternativ",
+        "options":["Programmering", "UX/UI design", "Projektledning", "Marknadsföring", "Sälj", "Analys", "Ledarskap", "Forskning", "Utveckling", "Strategi", "Kommunikation", "Ekonomi", "Copywriting"]
+    },
+    {
+        "id": 6,
+        "question": "Vilka områden intresserar dig mest just nu? Välj max 3 alternativ",
+        "options":["Programmering", "UX/UI design", "Projektledning", "Marknadsföring", "Sälj", "Analys", "Ledarskap", "Forskning", "Utveckling", "Strategi", "Kommunikation", "Ekonomi", "Copywriting"]
+    }
+  ]
