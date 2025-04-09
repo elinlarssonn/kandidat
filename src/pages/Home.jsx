@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import Button from '../components/button';
+import Questions from '../components/questions';
 
 const VIEW_START = 1;
 const VIEW_CONSENT = 2;
@@ -70,16 +71,6 @@ function Consent({ goTo }) {
 
         <button onClick={handleClick}>Starta</button>
       </div>
-    </div>
-  );
-}
-
-function Questions({ goTo }) {
-  return (
-    <div className="questions-page">
-      <h1>Frågor</h1>
-      <p>Här är några frågor som vi vill att du ska svara på.</p>
-      <Button label="Skicka in" onClick={() => goTo(VIEW_SUBMITTED)} />
     </div>
   );
 }
