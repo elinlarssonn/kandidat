@@ -3,7 +3,7 @@ import Button from '../components/button';
 import Dropdown from 'react-bootstrap/Dropdown';
 import questions from '../data/questions.json';
 
-function Questions({ goTo }) {
+function Questions({ goTo, email }) {
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [answers, setAnswers] = useState({});
 
@@ -41,22 +41,35 @@ function Questions({ goTo }) {
   };
 
   const nextQuestion = () => {
-    if (currentQuestionIndex < questions.length - 3) {
+    if (currentQuestionIndex < remainingQuestions.length - 1) {
       setCurrentQuestionIndex(prev => prev + 1);
     } else {
       submitAnswers();
     }
   };
 
-  const submitAnswers = () => {
-    console.log("Användarens svar:", answers);
-    goTo(5); // skickar vidare till "submitted"
-  };
+  const submitAnswers = async () => {
+    console.log("submitAnswers körs");
+    console.log("Svar som skickas:", answers);
+    try {
+        console.log('Skickar följande svar till backend:', answers);
+        const response = await fetch('http://localhost:5000/answers', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ userId: email, answers }),
+        });
+        const responseData = await response.text();
+        console.log('Svar från servern:', responseData);
+        goTo(4); // Gå till nästa vy
+    } catch (error) {
+        console.error('Kunde inte skicka svar:', error);
+    }
+};
 
   // Första tre frågor
   const firstThreeQuestions = questions.slice(0, 3);
   const remainingQuestions = questions.slice(3);
-  const currentQuestion = remainingQuestions[currentQuestionIndex];
+  const currentQuestion = currentQuestionIndex > 0 ? remainingQuestions[currentQuestionIndex - 1] : null;
 
   return (
     <div className="questions-page">
@@ -98,9 +111,10 @@ function Questions({ goTo }) {
           <Button label="Nästa fråga" onClick={() => setCurrentQuestionIndex(1)} />
         </div>
       ) : (
+        
         <div className="question">
-          <p>{currentQuestion.question}</p>
-          {currentQuestion.type === "dropdown" ? (
+          {currentQuestion && <p>{currentQuestion.question}</p>}
+          {currentQuestion && currentQuestion.type === "dropdown" ? (
             <Dropdown>
               <Dropdown.Toggle variant="success" id={`dropdown-${currentQuestion.id}`}>
                 {answers[currentQuestion.id]?.[0] || "Välj dett alternativ"}
@@ -118,7 +132,7 @@ function Questions({ goTo }) {
               </Dropdown.Menu>
             </Dropdown>
           ) : (
-            currentQuestion.options.map(option => (
+            currentQuestion && currentQuestion.options.map(option => (
               <div key={option} className="option">
                 <input
                   type="checkbox"
@@ -131,7 +145,7 @@ function Questions({ goTo }) {
             ))
           )}
           <Button
-            label={currentQuestionIndex < remainingQuestions.length ? "Nästa fråga" : "Skicka in"}
+            label={currentQuestionIndex < remainingQuestions.length - 1 ? "Nästa fråga" : "Skicka in"}
             onClick={nextQuestion}
           />
         </div>
