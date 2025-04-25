@@ -1,58 +1,53 @@
 const express = require('express');
-const mongoose = require('mongoose');
 const cors = require('cors');
+const fs = require ('fs');
+const path = require ('path')
 
 const app = express();
 
-app.use(cors());
+const corsOptions = {
+  origin: 'http://localhost:3000', // Tillåt förfrågningar från denna origin
+  methods: ['GET', 'POST', 'OPTIONS'],
+  allowedHeaders: ['Content-Type'],
+};
+
+app.use(cors(corsOptions));
+app.options('*', cors(corsOptions));
 app.use(express.json());
 
-// Anslut till MongoDB
-mongoose.connect('mongodb+srv://elinlarsson:b2NvKtypKF4Dp4AJ@kandidat.vgwnpdn.mongodb.net/?retryWrites=true&w=majority&appName=Kandidat', {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-}).then(() => {
-    console.log('Ansluten till MongoDB!');
-}).catch(err => {
-    console.error('Kunde inte ansluta till MongoDB:', err);
-});
+const DATA_FILE = path.join(__dirname, 'answer.json');
 
-// Skapa en schema och modell för svar
-const answerSchema = new mongoose.Schema({
-    userId: String,
-    answers: Object,
-    createdAt: {
-        type: Date,
-        default: Date.now
-    }
-});
+app.get('/answers', (req, res) => {
+    fs.readFile(DATA_FILE, 'utf8', (err, data) => {
+      if (err) {
+        return res.status(500).send('Kunde inte läsa svaren.');
+      }
+      const answers = JSON.parse(data || '[]');
+      res.json(answers);
+    });
+  });
 
-const Answer = mongoose.model('Answer', answerSchema);
-
-// API-endpoint för att spara svar
-app.post('/answers', async (req, res) => {
-    const { userId, answers } = req.body;
-    try {
-        const newAnswer = new Answer({ userId, answers });
-        await newAnswer.save();
+// Spara ett nytt svar
+app.post('/answers', (req, res) => {
+    console.log('Body:', req.body); // Lägg till för debugging
+    const newAnswer = {
+      userId: req.body.userId || null,
+      answers: req.body.answers,
+      createdAt: new Date().toISOString()
+    };
+  
+    fs.readFile(DATA_FILE, 'utf8', (err, data) => {
+      const answers = err ? [] : JSON.parse(data || '[]');
+      answers.push(newAnswer);
+      fs.writeFile(DATA_FILE, JSON.stringify(answers, null, 2), (err) => {
+        if (err) {
+          return res.status(500).send('Kunde inte spara svaret.');
+        }
         res.status(201).send('Svar sparat!');
-    } catch (error) {
-        res.status(500).send('Kunde inte spara svar.');
-    }
-});
-
-// API-endpoint för att hämta alla svar
-app.get('/answers', async (req, res) => {
-    try {
-        const allAnswers = await Answer.find();
-        res.status(200).json(allAnswers);
-    } catch (error) {
-        console.error('Fel vid hämtning:', error);
-        res.status(500).send('Kunde inte hämta svar.');
-    }
-});
-
-// Starta servern
-app.listen(5000, () => {
-    console.log('Servern körs på http://localhost:5000');
-});
+      });
+    });
+  });
+  
+  app.listen(5001, () => {
+    console.log('Servern körs på http://localhost:5001');
+  });

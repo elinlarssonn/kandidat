@@ -53,7 +53,7 @@ function Questions({ goTo, email }) {
     console.log("Svar som skickas:", answers);
     try {
         console.log('Skickar följande svar till backend:', answers);
-        const response = await fetch('http://localhost:5000/answers', {
+        const response = await fetch('http://localhost:5001/answers', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ userId: email, answers }),
