@@ -51,8 +51,13 @@ function Questions({ goTo, email }) {
   const submitAnswers = async () => {
     console.log("submitAnswers körs");
     console.log("Svar som skickas:", answers);
+    if (!email) {
+      alert('Du måste ange en mejladress först');
+      return;
+    }
+    console.log("Mejladress som skickas som userId:", email);
+    console.log('Skickar följande svar till backend:', answers);
     try {
-        console.log('Skickar följande svar till backend:', answers);
         const response = await fetch('http://localhost:5001/answers', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },

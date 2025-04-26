@@ -10,17 +10,21 @@ const VIEW_SUBMITTED = 5;
 
 function Home() {
     const [view, setView] = useState(VIEW_START);
+    const [email, setEmail] = useState(''); //state för att lagra mejl
   
     return (
       <div className="home-page">
-        {}
+        {/*startsida*/}
         {view === VIEW_START && <StartPage goTo={setView} />}
-        {}
+
+        {/*samtyckessida*/}
         {view === VIEW_CONSENT && <Consent goTo={setView} />}
-        {}
-        {view === VIEW_USER && <User goTo={setView}/>}
-        {}
-        {view === VIEW_QUESTIONS && <Questions goTo={setView} />}
+
+        {/*användaruppgifter*/}
+        {view === VIEW_USER && <User goTo={setView} setEmail={setEmail}/>}
+
+        {/*frågeformulär*/}
+        {view === VIEW_QUESTIONS && <Questions goTo={setView} email={email} />}
       </div>
     );
   }
@@ -77,26 +81,29 @@ function Consent({ goTo }) {
     </div>
   );
 }
-function User({ goTo }) {
+function User({ goTo, setEmail }) {
     const [firstName, setFirstName] = useState('');
     const [lastName, setLastName] = useState('');
-    const [email, setEmail] = useState('');
+    const [localEmail, setLocalEmail] = useState(''); // Lokal state för mejladressen
   
     const handleContinue = () => {
-      if (!firstName || !email) {
+      if (!firstName || !localEmail) {
         alert("Fyll i alla fält");
         return;
       }
 
+      // Spara mejladressen i Home.jsx via setEmail
+      setEmail(localEmail);
+
     // Här kan du lagra användarinformation, t.ex. i localStorage eller en global state
-    console.log("Användarinfo:", { firstName, lastName, email });
+    console.log("Användarinfo:", { firstName, lastName, email: localEmail });
     goTo(VIEW_QUESTIONS); 
     };
 
     return (
         <div className="user-info-form">
             <div>
-            <h1>Personuppgifter</h1>
+            <h1>Uppgifter</h1>
             <label>Förnamn</label>
             <input
                 type="text"
@@ -120,8 +127,8 @@ function User({ goTo }) {
             <label>E-postadress</label>
             <input
                 type="email"
-                value={email}
-                onChange={e => setEmail(e.target.value)}
+                value={localEmail}
+                onChange={e => setLocalEmail(e.target.value)}
                 placeholder="mejl@example.com"
             />
             </div>
