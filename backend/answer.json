@@ -1,0 +1,54 @@
+[
+  {
+    "userId": "elin@elin",
+    "answers": {
+      "1": "Studenter",
+      "2": "0-1 år",
+      "3": "Ja",
+      "4": [
+        "Hitta jobb"
+      ],
+      "5": [
+        "Folk med liknande yrkesroll",
+        "Seniora yrkespersoner/mentorer",
+        "Studenter"
+      ],
+      "6": [
+        "Utbildning & forskning",
+        "Hälso- & sjukvård"
+      ],
+      "7": [
+        "Turism, hotell & restaurang"
+      ],
+      "8": [
+        "Strategi",
+        "Kommunikation"
+      ]
+    },
+    "createdAt": "2025-04-26T08:59:13.198Z"
+  },
+  {
+    "userId": "elin@elin.se",
+    "answers": {
+      "1": "Nyexaminerade studenter",
+      "2": "0-1 år",
+      "3": "Ja",
+      "4": [
+        "Hitta jobb"
+      ],
+      "5": [
+        "Folk med liknande yrkesroll"
+      ],
+      "6": [
+        "Utbildning & forskning"
+      ],
+      "7": [
+        "Handel & e-handel"
+      ],
+      "8": [
+        "Strategi"
+      ]
+    },
+    "createdAt": "2025-04-26T09:25:29.985Z"
+  }
+]

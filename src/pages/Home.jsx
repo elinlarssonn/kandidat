@@ -86,9 +86,18 @@ function User({ goTo, setEmail }) {
     const [lastName, setLastName] = useState('');
     const [localEmail, setLocalEmail] = useState(''); // Lokal state för mejladressen
   
+    const isValidEmail = (email) => {
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      return emailRegex.test(email);
+    };
+
     const handleContinue = () => {
       if (!firstName || !localEmail) {
         alert("Fyll i alla fält");
+        return;
+      }
+      if (!isValidEmail(localEmail)) {
+        alert("Ange en giltig e-postadress");
         return;
       }
 
