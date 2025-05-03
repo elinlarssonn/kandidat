@@ -7,7 +7,6 @@ const VIEW_START = 1;
 const VIEW_CONSENT = 2;
 const VIEW_USER = 3;
 const VIEW_QUESTIONS = 4;
-
 const VIEW_RESULTS = 5; // Ny vy för matchningsresultat
 
 function Home() {
@@ -95,7 +94,7 @@ function User({ goTo, setEmail }) {
       return emailRegex.test(email);
     };
 
-    const handleContinue = () => {
+    const handleContinue = async () => {
       if (!firstName || !localEmail) {
         alert("Fyll i alla fält");
         return;
@@ -108,9 +107,24 @@ function User({ goTo, setEmail }) {
       // Spara mejladressen i Home.jsx via setEmail
       setEmail(localEmail);
 
-    // Här kan du lagra användarinformation, t.ex. i localStorage eller en global state
-    console.log("Användarinfo:", { firstName, lastName, email: localEmail });
-    goTo(VIEW_QUESTIONS); 
+      // Skicka användarens namn och mejl till backend
+      try {
+        const response = await fetch('http://localhost:5001/answers', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            userId: localEmail,
+            firstName,
+            lastName,
+          }),
+        });
+        const responseData = await response.text();
+        console.log('Svar från servern:', responseData);
+      } catch (error) {
+        console.error('Kunde inte skicka användaruppgifter:', error);
+      }
+
+      goTo(VIEW_QUESTIONS); 
     };
 
     return (

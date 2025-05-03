@@ -1,0 +1,56 @@
+[
+  {
+    "userId": "edvin.gantelius@gmail.com",
+    "firstName": "edvin",
+    "lastName": "gantelius",
+    "answers": {
+      "1": "Studenter",
+      "2": "0-1 år",
+      "3": "Nej",
+      "4": [
+        "Hitta jobb"
+      ],
+      "5": [
+        "Folk med liknande yrkesroll"
+      ],
+      "6": [
+        "Tech & IT"
+      ],
+      "7": [
+        "Tech & IT"
+      ],
+      "8": [
+        "Programmering"
+      ]
+    },
+    "createdAt": "2025-05-03T16:13:55.953Z",
+    "index": 1
+  },
+  {
+    "userId": "sara@gmail.com",
+    "firstName": "sara",
+    "lastName": "movin",
+    "answers": {
+      "1": "Studenter",
+      "2": "0-1 år",
+      "3": "Nej",
+      "4": [
+        "Rekrytera"
+      ],
+      "5": [
+        "Folk med liknande yrkesroll"
+      ],
+      "6": [
+        "Tech & IT"
+      ],
+      "7": [
+        "Startups & entreprenörskap"
+      ],
+      "8": [
+        "Programmering"
+      ]
+    },
+    "createdAt": "2025-05-03T16:14:25.918Z",
+    "index": 2
+  }
+]

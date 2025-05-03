@@ -32,27 +32,47 @@ app.post('/answers', (req, res) => {
     console.log('Body:', req.body); // Debugging
     const newAnswer = {
         userId: req.body.userId || null,
-        answers: req.body.answers,
+        firstName: req.body.firstName || null, // Ta emot förnamn
+        lastName: req.body.lastName || null,  // Ta emot efternamn
+        answers: req.body.answers || {},     // Ta emot svar
         createdAt: new Date().toISOString(), // Lägg till tidsstämpel
     };
 
     fs.readFile(DATA_FILE, 'utf8', (err, data) => {
-        const answers = err ? [] : JSON.parse(data || '[]');
+        if (err) {
+            console.error('Fel vid läsning av fil:', err);
+            return res.status(500).send('Kunde inte läsa svaren.');
+        }
 
-        // Dynamiskt skapa nästa index
-        const nextIndex = answers.length > 0 ? Math.max(...answers.map(a => a.index || 0)) + 1 : 1;
-        newAnswer.index = nextIndex; // Lägg till index i det nya svaret
+        let answers = JSON.parse(data || '[]');
 
-        console.log('Nytt svar med index och tidsstämpel:', JSON.stringify(newAnswer, null, 2)); // Logga hela objektet
+        // Kontrollera om användaren redan finns
+        const existingUserIndex = answers.findIndex(person => person.userId === newAnswer.userId);
 
-        answers.push(newAnswer); // Lägg till det nya svaret i listan
+        if (existingUserIndex !== -1) {
+            // Uppdatera befintlig användare
+            answers[existingUserIndex] = {
+                ...answers[existingUserIndex], // Behåll befintliga fält
+                firstName: newAnswer.firstName || answers[existingUserIndex].firstName,
+                lastName: newAnswer.lastName || answers[existingUserIndex].lastName,
+                answers: newAnswer.answers, // Uppdatera svar
+                createdAt: newAnswer.createdAt, // Uppdatera tidsstämpel
+            };
+            console.log('Uppdaterade befintlig användare:', answers[existingUserIndex]);
+        } else {
+            // Skapa ny användare
+            const nextIndex = answers.length > 0 ? Math.max(...answers.map(a => a.index || 0)) + 1 : 1;
+            newAnswer.index = nextIndex;
+            answers.push(newAnswer);
+            console.log('Lade till ny användare:', newAnswer);
+        }
 
+        // Skriv tillbaka till filen
         fs.writeFile(DATA_FILE, JSON.stringify(answers, null, 2), (err) => {
             if (err) {
-                console.error('Fel vid skrivning till fil:', err); // Logga skrivfel
+                console.error('Fel vid skrivning till fil:', err);
                 return res.status(500).send('Kunde inte spara svaret.');
             }
-            console.log('Svar sparat till fil:', JSON.stringify(newAnswer, null, 2)); // Bekräfta att det sparades
             res.status(201).send('Svar sparat!');
         });
     });
@@ -64,6 +84,16 @@ app.post('/answers', (req, res) => {
 // Funktion för att beräkna matchningspoäng
 function calculateMatchScore(personA, personB) {
     let score = 0;
+
+
+    // FRÅGA 2
+
+    // Erfarenhetsnivå 
+    const experienceA = parseInt(personA.answers[2]) || 0;
+    const experienceB = parseInt(personB.answers[2]) || 0;
+    if (Math.abs(experienceA - experienceB) <= 2) score += 1;
+    console.log('Total poäng, lika lång erfarenhet:', score); // Logga poängen
+
 
     // FRÅGA 4
 
@@ -78,26 +108,33 @@ function calculateMatchScore(personA, personB) {
         (intention === "Starta ett projekt" && intentionsB.includes("Starta ett projekt"))
     );
     score += complementaryIntentions.length * 5; // Ge 5 poäng per komplementär intention
-    console.log('Poäng, komplementära intentioner:', score); // Logga poängen
 
     // dålig matchning som inte säger så mycket
     const noneOfTheAboveMatch = intentionsA.includes("Inget av ovan") && intentionsB.includes("Inget av ovan");
-    if (noneOfTheAboveMatch) score += 2;
+    if (noneOfTheAboveMatch) score += 1;
 
-    // helt ok match?
+    // Komplementära intentioner, helt ok match?
     const projectCollaboration = intentionsA.filter(intention =>
         (intention === "Hitta samarbetspartners" && intentionsB.includes("Starta ett projekt")) ||
         (intention === "Starta ett projekt" && intentionsB.includes("Hitta samarbetspartners"))
     );
     score += projectCollaboration.length * 3; // Ge 3 poäng per projekt-samarbete
-    console.log('Total poäng fråga 4', score); // Logga poängen
+
+    console.log('Total poäng, komplementära intentioner:', score); // Logga poängen
+    console.log('Total poäng fråga 4:', score); // Logga poängen
+
+
+    //FRÅGA 5
 
     // 2. Sökande yrkesroller (fråga 5)
     const targetGroupsA = personA.answers[5] || [];
     const targetGroupsB = personB.answers[5] || [];
     const sharedTargetGroups = targetGroupsA.filter(group => targetGroupsB.includes(group));
     score += sharedTargetGroups.length * 2;
-    console.log('Poäng, mest intresserad av att prata med:', score); // Logga poängen
+    console.log('Total poäng, mest intresserad av att prata med:', score); // Logga poängen
+
+
+    //FRÅGA 6 & 7
 
     // 3. Komplementära branscher (fråga 6 och 7)
     const industriesA = personA.answers[6] || [];
@@ -110,31 +147,33 @@ function calculateMatchScore(personA, personB) {
                        industriesB.some(industry => desiredIndustriesA.includes(industry));
     if (superMatch) {
         score += 10; 
+        console.log('Total poäng söker samma bransch, supermatch:', score); // Logga poängen
     }
-    console.log('Poäng söker samma bransch, supermatch:', score); // Logga poängen
+    //console.log('Poäng söker samma bransch, supermatch:', score); // Logga poängen
 
     const sharedIndustries = industriesA.filter(industry => industriesB.includes(industry));
-    score += sharedIndustries.length * 3;
-    console.log('Poäng, jobbar i samma bransch:', score); // Logga poängen
+    if (sharedIndustries) {
+        score += sharedIndustries.length * 3;
+        console.log('Total poäng, jobbar i samma bransch:', score); // Logga poängen
+    }
 
     const rolesA = personA.answers[7] || [];
     const rolesB = personB.answers[7] || [];
     const sharedRoles = rolesA.filter(role => rolesB.includes(role));
-    score += sharedRoles.length * 3;
-    console.log('Poäng, söker folk i samma bransch:', score); // Logga poängen
+    if (sharedRoles) {
+        score += sharedRoles.length * 3;
+        console.log('Total poäng, söker folk i samma bransch:', score); // Logga poängen
+    }
 
-    // 4. Gemensamma kompetenser (fråga 8)
+    //FRÅGA 8
+
+    // Gemensamma kompetenser (fråga 8)
     const skillsA = personA.answers[8] || [];
     const skillsB = personB.answers[8] || [];
     const sharedSkills = skillsA.filter(skill => skillsB.includes(skill));
     score += sharedSkills.length * 1;
-    console.log('Poäng gemensamma kompetenser:', score); // Logga poängen
+    console.log('Total poäng gemensamma kompetenser:', score); // Logga poängen
 
-    // 5. Erfarenhetsnivå (fråga 2)
-    const experienceA = parseInt(personA.answers[2]) || 0;
-    const experienceB = parseInt(personB.answers[2]) || 0;
-    if (Math.abs(experienceA - experienceB) <= 2) score += 1;
-    console.log('Poäng, lika lång erfarenhet:', score); // Logga poängen
 
     return score; // Returnera den totala matchningspoängen
 }
@@ -154,22 +193,32 @@ app.get('/match-all', (req, res) => {
         const answers = JSON.parse(data || '[]');
         const matchResults = [];
 
+        // Hitta användaren som gör förfrågan
+        const requestingUser = answers.find(person => person.userId === userId);
+        if (!requestingUser) {
+            return res.status(404).send('Användaren hittades inte.');
+        }
+
         // Iterera över alla kombinationer av personer
         for (let i = 0; i < answers.length; i++) {
-            const personA = answers[i];
-            if (personA.userId !== userId) continue; // Endast matchningar för det angivna userId
+            const personB = answers[i];
+            if (personB.userId === userId) continue; // Hoppa över samma person
 
-            for (let j = 0; j < answers.length; j++) {
-                if (i === j) continue; // Hoppa över samma person
-                const personB = answers[j];
-                const matchScore = calculateMatchScore(personA, personB);
+            const matchScore = calculateMatchScore(requestingUser, personB);
 
-                matchResults.push({
-                    userA: personA.userId,
-                    userB: personB.userId,
-                    matchScore,
-                });
-            }
+            matchResults.push({
+                userA: {
+                    userId: requestingUser.userId,
+                    firstName: requestingUser.firstName || "Okänd",
+                    lastName: requestingUser.lastName || "Okänd"
+                },
+                userB: {
+                    userId: personB.userId,
+                    firstName: personB.firstName || "Okänd",
+                    lastName: personB.lastName || "Okänd"
+                },
+                matchScore,
+            });
         }
 
         // Sortera matchningsresultaten efter poäng i fallande ordning
