@@ -70,30 +70,34 @@ function calculateMatchScore(personA, personB) {
     // 1. Komplementära intentioner
     const intentionsA = personA.answers[4] || [];
     const intentionsB = personB.answers[4] || [];
-    const complementaryIntentions = intentionsA.some(intention =>
+    const complementaryIntentions = intentionsA.filter(intention =>
         (intention === "Hitta jobb" && intentionsB.includes("Rekrytera")) ||
         (intention === "Rekrytera" && intentionsB.includes("Hitta jobb")) ||
         (intention === "Hitta samarbetspartners" && intentionsB.includes("Hitta samarbetspartners")) ||
         (intention === "Träffa nya kontakter" && intentionsB.includes("Träffa nya kontakter")) ||
         (intention === "Starta ett projekt" && intentionsB.includes("Starta ett projekt"))
     );
-    if (complementaryIntentions) score += 5;
+    score += complementaryIntentions.length * 5; // Ge 5 poäng per komplementär intention
+    console.log('Poäng, komplementära intentioner:', score); // Logga poängen
 
     // dålig matchning som inte säger så mycket
     const noneOfTheAboveMatch = intentionsA.includes("Inget av ovan") && intentionsB.includes("Inget av ovan");
     if (noneOfTheAboveMatch) score += 2;
 
     // helt ok match?
-    const projectCollaboration = 
-        (intentionsA.includes("Hitta samarbetspartners") && intentionsB.includes("Starta ett projekt")) ||
-        (intentionsA.includes("Starta ett projekt") && intentionsB.includes("Hitta samarbetspartners"));
-    if (projectCollaboration) score += 3;
+    const projectCollaboration = intentionsA.filter(intention =>
+        (intention === "Hitta samarbetspartners" && intentionsB.includes("Starta ett projekt")) ||
+        (intention === "Starta ett projekt" && intentionsB.includes("Hitta samarbetspartners"))
+    );
+    score += projectCollaboration.length * 3; // Ge 3 poäng per projekt-samarbete
+    console.log('Total poäng fråga 4', score); // Logga poängen
 
-    // 2. Gemensam målgrupp (fråga 5)
+    // 2. Sökande yrkesroller (fråga 5)
     const targetGroupsA = personA.answers[5] || [];
     const targetGroupsB = personB.answers[5] || [];
     const sharedTargetGroups = targetGroupsA.filter(group => targetGroupsB.includes(group));
     score += sharedTargetGroups.length * 2;
+    console.log('Poäng, mest intresserad av att prata med:', score); // Logga poängen
 
     // 3. Komplementära branscher (fråga 6 och 7)
     const industriesA = personA.answers[6] || [];
@@ -107,32 +111,40 @@ function calculateMatchScore(personA, personB) {
     if (superMatch) {
         score += 10; 
     }
+    console.log('Poäng söker samma bransch, supermatch:', score); // Logga poängen
 
     const sharedIndustries = industriesA.filter(industry => industriesB.includes(industry));
     score += sharedIndustries.length * 3;
+    console.log('Poäng, jobbar i samma bransch:', score); // Logga poängen
 
     const rolesA = personA.answers[7] || [];
     const rolesB = personB.answers[7] || [];
     const sharedRoles = rolesA.filter(role => rolesB.includes(role));
     score += sharedRoles.length * 3;
+    console.log('Poäng, söker folk i samma bransch:', score); // Logga poängen
 
     // 4. Gemensamma kompetenser (fråga 8)
     const skillsA = personA.answers[8] || [];
     const skillsB = personB.answers[8] || [];
     const sharedSkills = skillsA.filter(skill => skillsB.includes(skill));
     score += sharedSkills.length * 1;
+    console.log('Poäng gemensamma kompetenser:', score); // Logga poängen
 
     // 5. Erfarenhetsnivå (fråga 2)
     const experienceA = parseInt(personA.answers[2]) || 0;
     const experienceB = parseInt(personB.answers[2]) || 0;
     if (Math.abs(experienceA - experienceB) <= 2) score += 1;
+    console.log('Poäng, lika lång erfarenhet:', score); // Logga poängen
 
     return score; // Returnera den totala matchningspoängen
 }
 
-// Endpoint för att matcha två personer
-app.get('/match/:index1/:index2', (req, res) => {
-    const { index1, index2 } = req.params;
+// Endpoint för att matcha alla personer
+app.get('/match-all', (req, res) => {
+    const userId = req.query.userId; // Hämta userId från förfrågan
+    if (!userId) {
+        return res.status(400).send('UserId krävs för att hämta matchningar.');
+    }
 
     fs.readFile(DATA_FILE, 'utf8', (err, data) => {
         if (err) {
@@ -140,23 +152,79 @@ app.get('/match/:index1/:index2', (req, res) => {
         }
 
         const answers = JSON.parse(data || '[]');
-        const personA = answers.find(person => person.index === parseInt(index1));
-        const personB = answers.find(person => person.index === parseInt(index2));
+        const matchResults = [];
 
-        if (!personA || !personB) {
-            return res.status(404).send('En eller båda personerna hittades inte.');
+        // Iterera över alla kombinationer av personer
+        for (let i = 0; i < answers.length; i++) {
+            const personA = answers[i];
+            if (personA.userId !== userId) continue; // Endast matchningar för det angivna userId
+
+            for (let j = 0; j < answers.length; j++) {
+                if (i === j) continue; // Hoppa över samma person
+                const personB = answers[j];
+                const matchScore = calculateMatchScore(personA, personB);
+
+                matchResults.push({
+                    userA: personA.userId,
+                    userB: personB.userId,
+                    matchScore,
+                });
+            }
         }
 
-        const matchScore = calculateMatchScore(personA, personB);
+        // Sortera matchningsresultaten efter poäng i fallande ordning
+        matchResults.sort((a, b) => b.matchScore - a.matchScore);
 
-        // Logga resultatet i terminalen
-        console.log(`Matchning mellan ${personA.userId} och ${personB.userId}:`);
-        console.log(`Matchningspoäng: ${matchScore}`);
-
-        res.json({ personA: personA.userId, personB: personB.userId, matchScore });
+        // Returnera de tre högsta matchningarna
+        const topMatches = matchResults.slice(0, 3);
+        res.json(topMatches);
+        console.log(`Topp 3 matchningsresultat för userId ${userId}:`, topMatches); // Logga topp 3 matchningsresultaten med userId
     });
 });
-  
+
+// Endpoint för att dynamiskt uppdatera matchningar för alla personer
+app.get('/match-all-dynamic', (req, res) => {
+    const userId = req.query.userId; // Hämta userId från förfrågan
+    if (!userId) {
+        return res.status(400).send('UserId krävs för att hämta matchningar.');
+    }
+
+    fs.readFile(DATA_FILE, 'utf8', (err, data) => {
+        if (err) {
+            return res.status(500).send('Kunde inte läsa svaren.');
+        }
+
+        const answers = JSON.parse(data || '[]');
+        const matchResults = [];
+
+        // Iterera över alla kombinationer av personer
+        for (let i = 0; i < answers.length; i++) {
+            const personA = answers[i];
+            if (personA.userId !== userId) continue; // Endast matchningar för det angivna userId
+
+            for (let j = 0; j < answers.length; j++) {
+                if (i === j) continue; // Hoppa över samma person
+                const personB = answers[j];
+                const matchScore = calculateMatchScore(personA, personB);
+
+                matchResults.push({
+                    userA: personA.userId,
+                    userB: personB.userId,
+                    matchScore,
+                });
+            }
+        }
+
+        // Sortera matchningsresultaten efter poäng i fallande ordning
+        matchResults.sort((a, b) => b.matchScore - a.matchScore);
+
+        // Returnera de tre högsta matchningarna
+        const topMatches = matchResults.slice(0, 3);
+        res.json(topMatches);
+        console.log(`Topp 3 dynamiska matchningsresultat för userId ${userId}:`, topMatches); // Logga topp 3 dynamiska matchningsresultaten med userId
+    });
+});
+
 app.listen(5001, () => {
     console.log('Servern körs på http://localhost:5001');
   });

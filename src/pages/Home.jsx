@@ -1,12 +1,14 @@
 import React, { useState } from 'react';
 import Button from '../components/button';
 import Questions from '../components/questions';
+import MatchResults from '../components/match'; // Importera MatchResults
 
 const VIEW_START = 1;
 const VIEW_CONSENT = 2;
 const VIEW_USER = 3;
 const VIEW_QUESTIONS = 4;
-const VIEW_SUBMITTED = 5;
+
+const VIEW_RESULTS = 5; // Ny vy för matchningsresultat
 
 function Home() {
     const [view, setView] = useState(VIEW_START);
@@ -25,11 +27,13 @@ function Home() {
 
         {/*frågeformulär*/}
         {view === VIEW_QUESTIONS && <Questions goTo={setView} email={email} />}
+
+        {/*matchningsresultat*/}
+        {view === VIEW_RESULTS && <MatchResults goTo={setView} userId={email} refresh={() => setView(VIEW_RESULTS)} />}
       </div>
     );
   }
   
-
 
 function StartPage({ goTo }) {
   return (
@@ -146,5 +150,6 @@ function User({ goTo, setEmail }) {
         </div>
   );
 }
+
 
 export default Home;

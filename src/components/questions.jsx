@@ -65,7 +65,7 @@ function Questions({ goTo, email }) {
         });
         const responseData = await response.text();
         console.log('Svar från servern:', responseData);
-        goTo(4); // Gå till nästa vy
+        goTo(5); // Gå till nästa vy
     } catch (error) {
         console.error('Kunde inte skicka svar:', error);
     }
