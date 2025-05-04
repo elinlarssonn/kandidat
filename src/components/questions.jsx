@@ -2,6 +2,9 @@ import React, { useState } from 'react';
 import Button from '../components/button';
 import Dropdown from 'react-bootstrap/Dropdown';
 import questions from '../data/questions.json';
+import '../Mobile.css';
+
+
 
 function Questions({ goTo, email }) {
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
@@ -101,18 +104,23 @@ function Questions({ goTo, email }) {
                   ))}
                 </div>
               ) : (
-                <select
-                  value={answers[q.id] || ''}
-                  onChange={e => handleDropdownChange(q.id, e.target.value)}
-                >
-                  <option value="">Välj</option>
-                  {q.options.map(option => (
-                    <option key={option} value={option}>{option}</option>
-                  ))}
-                </select>
-              )}
-            </div>
-          ))}
+              <Dropdown>
+                <Dropdown.Toggle variant="success" id={`dropdown-${q.id}`}>
+                  {answers[q.id] || "Välj"}
+                  </Dropdown.Toggle>
+                  <Dropdown.Menu>
+                    {q.options.map(option => (
+                      <Dropdown.Item
+                      key={option}
+                      onClick={() => handleDropdownChange(q.id, option)}>
+                        {option}
+                      </Dropdown.Item>
+                    ))}
+                  </Dropdown.Menu>
+              </Dropdown>
+            )}
+          </div>
+        ))}
           <Button label="Nästa fråga" onClick={() => setCurrentQuestionIndex(1)} />
         </div>
       ) : (
