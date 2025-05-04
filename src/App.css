@@ -168,3 +168,64 @@ button:hover {
   padding: 10px 16px;
 }
 
+.match-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+
+.info-button, .chat-button {
+  margin-left: 10px; /* Öka mellanrum mellan knappar och text */
+  padding: 4px 6px; /* Justera padding för bättre proportioner */
+  border: none;
+  border-radius: 50%;
+  cursor: pointer;
+  font-size: 14px; /* Mindre textstorlek */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.info-button {
+  background-color: #007bff;
+  color: white;
+  margin-right: 10px; /* Mellanrum mellan första och andra knappen */
+}
+
+.chat-button {
+  background-color: #28a745;
+  color: white;
+}
+
+.match-item > span {
+  margin-right: 15px; /* Mellanrum mellan texten och första knappen */
+}
+
+.info-popup {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: white;
+  padding: 20px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  z-index: 1000;
+}
+
+.info-popup-content {
+  text-align: center;
+}
+
+.info-popup button {
+  margin-top: 10px;
+  padding: 5px 10px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
