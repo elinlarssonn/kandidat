@@ -1,6 +1,7 @@
 import logo from './logo.svg';
 import React from 'react'
 import './App.css';
+import './Mobile.css';
 import Home from './pages/Home';
 import 'bootstrap/dist/css/bootstrap.min.css';
 

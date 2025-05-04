@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import Button from '../components/button';
 import Questions from '../components/questions';
 import MatchResults from '../components/match'; // Importera MatchResults
+import Header from '../components/header'; 
+
 
 const VIEW_START = 1;
 const VIEW_CONSENT = 2;
@@ -15,20 +17,42 @@ function Home() {
   
     return (
       <div className="home-page">
-        {/*startsida*/}
-        {view === VIEW_START && <StartPage goTo={setView} />}
 
-        {/*samtyckessida*/}
-        {view === VIEW_CONSENT && <Consent goTo={setView} />}
+        {view === VIEW_START && (
+          <>
+            <Header title="Inför Eventet" />
+            <StartPage goTo={setView} />
+          </>
+        )}
 
-        {/*användaruppgifter*/}
-        {view === VIEW_USER && <User goTo={setView} setEmail={setEmail}/>}
+        {view === VIEW_CONSENT && (
+          <>
+            <Header title="Samtycke" onBack={() => setView(VIEW_START)} />
+            <Consent goTo={setView} />
+          </>
+        )}
 
-        {/*frågeformulär*/}
-        {view === VIEW_QUESTIONS && <Questions goTo={setView} email={email} />}
+        {view === VIEW_USER && (
+          <>
+            <Header title="Personuppgifter" onBack={() => setView(VIEW_CONSENT)} />
+            <User goTo={setView} setEmail={setEmail} />
+          </>
+        )}
 
-        {/*matchningsresultat*/}
-        {view === VIEW_RESULTS && <MatchResults goTo={setView} userId={email} refresh={() => setView(VIEW_RESULTS)} />}
+        {view === VIEW_QUESTIONS && (
+          <>
+            <Header title="Frågor om dig" onBack={() => setView(VIEW_USER)} />
+            <Questions goTo={setView} email={email} />
+          </>
+        )}
+
+        {view === VIEW_RESULTS && (
+          <>
+            <Header title="Dina matchningar" onBack={() => setView(VIEW_QUESTIONS)} />
+            <MatchResults goTo={setView} userId={email} refresh={() => setView(VIEW_RESULTS)} />
+          </>
+        )}
+
       </div>
     );
   }
@@ -55,19 +79,18 @@ function Consent({ goTo }) {
     if (approved) {
       goTo(VIEW_USER);
     } else {
-      alert("Du måste godkänna villkoren");
+      alert("Du måste godkänna villkoren för att fortsätta. Tryck på det röda krysset om du inte godkänner villkoren.");
     }
   };
 
   return (
     <div className="consent-overlay">
-      <button className="close-button" onClick={() => goTo(VIEW_START)}>❌</button>
 
       <div className="consent-box">
         <p>
-          Dina svar på frågorna inför eventet kommer att delas med andra deltagare
-          i syfte att möjliggöra relevanta nätverkskopplingar. Genom att delta
-          samtycker du till detta.
+        Genom att delta och lämna dina svar samtycker du till att dina personuppgifter 
+        behandlas för att möjliggöra matchning med relevanta nätverkskontakter. 
+        Behandlingen sker i enlighet med gällande dataskyddslagstiftning.
         </p>
 
         <div className="checkbox-container">
@@ -80,6 +103,7 @@ function Consent({ goTo }) {
         </div>
 
         <button onClick={handleClick}>Starta</button>
+        <button className="close-button" onClick={() => goTo(VIEW_START)}>✖️</button>
       </div>
     </div>
   );
@@ -96,7 +120,7 @@ function User({ goTo, setEmail }) {
 
     const handleContinue = async () => {
       if (!firstName || !localEmail) {
-        alert("Fyll i alla fält");
+        alert("Fyll i förnamn och e-mail");
         return;
       }
       if (!isValidEmail(localEmail)) {
@@ -130,7 +154,7 @@ function User({ goTo, setEmail }) {
     return (
         <div className="user-info-form">
             <div>
-            <h1>Uppgifter</h1>
+            <h1>Personuppgifter</h1>
             <label>Förnamn</label>
             <input
                 type="text"

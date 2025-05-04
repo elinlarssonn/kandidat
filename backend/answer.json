@@ -50,5 +50,13 @@
     },
     "createdAt": "2025-05-04T14:56:04.368Z",
     "index": 2
+  },
+  {
+    "userId": "pcarolina.cuevas@gmail.com",
+    "firstName": "Carolina ",
+    "lastName": null,
+    "answers": {},
+    "createdAt": "2025-05-04T11:42:39.656Z",
+    "index": 3
   }
 ]
