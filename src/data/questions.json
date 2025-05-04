@@ -6,7 +6,7 @@
         "Analytiker", "Ekonom", "Konsult", "Ingenjör", "Säljare"]
     },
     {"id":2,
-        "type": "dropdown",
+        "type": "checkbox",
         "question":"Hur många års erfarenhet har du inom ditt yrkesområde?",
         "options":["0-1 år", "1-3 år", "3-5 år", "5-10 år", "10+ år"]
     },

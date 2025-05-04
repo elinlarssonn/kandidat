@@ -86,15 +86,6 @@ function calculateMatchScore(personA, personB) {
     let score = 0;
 
 
-    // FRÅGA 2
-
-    // Erfarenhetsnivå 
-    const experienceA = parseInt(personA.answers[2]) || 0;
-    const experienceB = parseInt(personB.answers[2]) || 0;
-    if (Math.abs(experienceA - experienceB) <= 2) score += 1;
-    console.log('Total poäng, lika lång erfarenhet:', score); // Logga poängen
-
-
     // FRÅGA 4
 
     // 1. Komplementära intentioner
@@ -109,22 +100,66 @@ function calculateMatchScore(personA, personB) {
     );
     score += complementaryIntentions.length * 5; // Ge 5 poäng per komplementär intention
 
-    // dålig matchning som inte säger så mycket
-    const noneOfTheAboveMatch = intentionsA.includes("Inget av ovan") && intentionsB.includes("Inget av ovan");
-    if (noneOfTheAboveMatch) score += 1;
-
     // Komplementära intentioner, helt ok match?
     const projectCollaboration = intentionsA.filter(intention =>
         (intention === "Hitta samarbetspartners" && intentionsB.includes("Starta ett projekt")) ||
-        (intention === "Starta ett projekt" && intentionsB.includes("Hitta samarbetspartners"))
+        (intention === "Starta ett projekt" && intentionsB.includes("Hitta samarbetspartners"))||
+
+        (intention === "Bli inspirerad" && intentionsB.includes("Träffa nya kontakter"))||
+        (intention === "Träffa nya kontakter" && intentionsB.includes("Bli inspirerad"))||
+
+        (intention === "Nya kunder" && intentionsB.includes("Hitta samarbetspartners"))||
+        (intention === "Hitta samarbetspartner" && intentionsB.includes("Nya kunder"))||
+
+        (intention === "Nya kunder" && intentionsB.includes("Träffa nya kontakter"))||
+        (intention === "Träffa nya kontakter" && intentionsB.includes("Nya kunder"))||
+
+        (intention === "Träffa nya kontakter" && intentionsB.includes("Hitta samarbetspartners"))||
+        (intention === "Hitta samarbetspartners" && intentionsB.includes("Träffa nya kontakter"))
     );
     score += projectCollaboration.length * 3; // Ge 3 poäng per projekt-samarbete
 
     console.log('Total poäng, komplementära intentioner:', score); // Logga poängen
     console.log('Total poäng fråga 4:', score); // Logga poängen
 
+    //Fråga 3,5,6,7 - Mentor
+    const currentUserWantsMentorsA = personA.answers[5]?.includes("Seniora yrkespersoner/mentorer");
+    const currentUserInterestedInBranschA = personA.answers[7]?.some(bransch =>
+            personB.answers[6]?.includes(bransch)
+        );
+    const otherUserWantsToMentorA = personB.answers[3] === "Ja";
+    const otherUserWorksInBranschA = personB.answers[6]?.some(bransch =>
+            personA.answers[7]?.includes(bransch)
+        );
 
-    //FRÅGA 5
+    const currentUserWantsMentorsB = personB.answers[5]?.includes("Seniora yrkespersoner/mentorer");
+    const currentUserInterestedInBranschB = personB.answers[7]?.some(bransch =>
+            personA.answers[6]?.includes(bransch)
+        );
+    const otherUserWantsToMentorB = personA.answers[3] === "Ja";
+    const otherUserWorksInBranschB = personA.answers[6]?.some(bransch =>
+            personB.answers[7]?.includes(bransch)
+        );
+ 
+    if (
+        currentUserWantsMentorsA &&
+        currentUserInterestedInBranschA &&
+        otherUserWantsToMentorA &&
+        otherUserWorksInBranschA
+        ) {
+            score += 4; // Öka poängen för denna matchning
+        } else if (
+            currentUserWantsMentorsB &&
+            currentUserInterestedInBranschB &&
+            otherUserWantsToMentorB &&
+            otherUserWorksInBranschB
+        ){
+            score += 4; // Öka poängen för denna matchning
+        }
+        
+        console.log('Poäng efter matchning med mentor', score); // Logga poängen
+
+        //FRÅGA 5
 
     // 2. Sökande yrkesroller (fråga 5)
     const targetGroupsA = personA.answers[5] || [];
@@ -151,18 +186,17 @@ function calculateMatchScore(personA, personB) {
     }
     //console.log('Poäng söker samma bransch, supermatch:', score); // Logga poängen
 
-    const sharedIndustries = industriesA.filter(industry => industriesB.includes(industry));
+    const sharedIndustries = industriesA.some(industry => industriesB.includes(industry));
     if (sharedIndustries) {
-        score += sharedIndustries.length * 3;
+        score += 5;
         console.log('Total poäng, jobbar i samma bransch:', score); // Logga poängen
     }
 
-    const rolesA = personA.answers[7] || [];
-    const rolesB = personB.answers[7] || [];
-    const sharedRoles = rolesA.filter(role => rolesB.includes(role));
-    if (sharedRoles) {
-        score += sharedRoles.length * 3;
-        console.log('Total poäng, söker folk i samma bransch:', score); // Logga poängen
+    const overlapingInterests = industriesA.some(industry => desiredIndustriesB.includes(industry)) ||
+                                industriesB.some(industry => desiredIndustriesA.includes(industry));
+    if (overlapingInterests) {
+        score += 3;
+        console.log('Total poäng efter att ha kollar overlapingInterests:', score); //Logga poäng
     }
 
     //FRÅGA 8

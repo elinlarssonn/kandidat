@@ -217,6 +217,7 @@ button:hover {
 
 .info-popup-content {
   text-align: center;
+  color: black;
 }
 
 .info-popup button {

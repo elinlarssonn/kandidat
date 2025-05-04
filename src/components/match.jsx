@@ -18,7 +18,12 @@ function MatchResults({ goTo, userId }) {
     };
 
     const openInfoPopup = (user) => {
-        setSelectedUser(user); // Sätt användaren som ska visas i popup
+        console.log(user);
+        setSelectedUser({
+            firstName: user.firstName,
+            lastName: user.lastName,
+            userId: user.userId, // Kontrollera att detta är rätt fält för mejl
+        });
     };
 
     const closeInfoPopup = () => {
@@ -32,7 +37,7 @@ function MatchResults({ goTo, userId }) {
     };
 
     // Hämta användarens namn från resultaten
-    const userName = results.length > 0 ? `${results[0].userA.firstName}` : "Användaren";
+    const userName = results.length > 0 ? `${results[0].userA.firstName}` : "dig";
 
     return (
         <div className="match-results">
@@ -53,6 +58,7 @@ function MatchResults({ goTo, userId }) {
             <Button label="Uppdatera matchningar" onClick={fetchResults} />
 
             {/* Popup för information */}
+            {console.log("Selected User State:", selectedUser)}
             {selectedUser && (
                 <div className="info-popup">
                     <div className="info-popup-content">

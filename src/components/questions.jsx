@@ -26,6 +26,13 @@ function Questions({ goTo, email }) {
     });
   };
 
+  const handleSingleCheckbox = (questionId, option) => {
+    setAnswers(prev => ({
+        ...prev,
+        [questionId]: [option], // Spara endast det valda alternativet som en array
+    }));
+  };
+
   const handleDropdownChange = (questionId, value) => {
     setAnswers(prev => ({
       ...prev,
@@ -72,8 +79,9 @@ function Questions({ goTo, email }) {
 };
 
   // Första tre frågor
-  const firstThreeQuestions = questions.slice(0, 3);
+  const firstThreeQuestions = questions.slice(0, 2);
   const remainingQuestions = questions.slice(3);
+  const mentorQuestion = questions.find(q => q.id === 3); // Hämta mentorfrågan från JSON
   const currentQuestion = currentQuestionIndex > 0 ? remainingQuestions[currentQuestionIndex - 1] : null;
 
   return (
@@ -85,7 +93,17 @@ function Questions({ goTo, email }) {
           {firstThreeQuestions.map(q => (
             <div key={q.id} className="question-block">
               <label>{q.question}</label>
-              {q.options.length <= 2 ? (
+              {q.id === 2 ? (
+                <select
+                  value={answers[q.id] || ''}
+                  onChange={e => handleDropdownChange(q.id, e.target.value)}
+                >
+                  <option value="" disabled>Välj ett alternativ</option>
+                  {q.options.map(option => (
+                    <option key={option} value={option}>{option}</option>
+                  ))}
+                </select>
+              ) : q.options.length <= 2 ? (
                 <div className="radio-group">
                   {q.options.map(option => (
                     <label key={option}>
@@ -113,29 +131,60 @@ function Questions({ goTo, email }) {
               )}
             </div>
           ))}
+
+          {/* Visa mentorfrågan om erfarenhetsfrågan har ett specifikt svar */}
+          {(answers[2] === "3-5 år" || answers[2] === "5-10 år" || answers[2] === "10+ år") && mentorQuestion && (
+            <div className="question-block">
+              <label>{mentorQuestion.question}</label>
+              <div className="radio-group">
+                {mentorQuestion.options.map(option => (
+                  <label key={option}>
+                    <input
+                      type="radio"
+                      name={`radio-${mentorQuestion.id}`}
+                      value={option}
+                      checked={answers[mentorQuestion.id] === option}
+                      onChange={() => handleRadioChange(mentorQuestion.id, option)}
+                    />
+                    {option}
+                  </label>
+                ))}
+              </div>
+            </div>
+          )}
+
           <Button label="Nästa fråga" onClick={() => setCurrentQuestionIndex(1)} />
         </div>
       ) : (
         
         <div className="question">
           {currentQuestion && <p>{currentQuestion.question}</p>}
-          {currentQuestion && currentQuestion.type === "dropdown" ? (
-            <Dropdown>
-              <Dropdown.Toggle variant="success" id={`dropdown-${currentQuestion.id}`}>
-                {answers[currentQuestion.id]?.[0] || "Välj dett alternativ"}
-              </Dropdown.Toggle>
-
-              <Dropdown.Menu>
-                {currentQuestion.options.map(option => (
-                  <Dropdown.Item
-                    key={option}
-                    onClick={() => handleDropdownChange(currentQuestion.id, option)}
-                  >
-                    {option}
-                  </Dropdown.Item>
-                ))}
-              </Dropdown.Menu>
-            </Dropdown>
+          {currentQuestion && currentQuestion.id === 6 ? (
+            // Fråga 6: Endast en checkbox kan väljas
+            currentQuestion.options.map(option => (
+                <div key={option} className="option">
+                    <input
+                        type="checkbox"
+                        id={`${currentQuestion.id}-${option}`}
+                        checked={answers[currentQuestion.id]?.includes(option) || false}
+                        onChange={() => handleSingleCheckbox(currentQuestion.id, option)}
+                    />
+                    <label htmlFor={`${currentQuestion.id}-${option}`}>{option}</label>
+                </div>
+            ))
+          ) : currentQuestion && currentQuestion.id === 7 ? (
+            // Fråga 7: Max tre checkboxar kan väljas
+            currentQuestion.options.map(option => (
+                <div key={option} className="option">
+                    <input
+                        type="checkbox"
+                        id={`${currentQuestion.id}-${option}`}
+                        checked={answers[currentQuestion.id]?.includes(option) || false}
+                        onChange={() => handleAnswer(currentQuestion.id, option)}
+                    />
+                    <label htmlFor={`${currentQuestion.id}-${option}`}>{option}</label>
+                </div>
+            ))
           ) : (
             currentQuestion && currentQuestion.options.map(option => (
               <div key={option} className="option">

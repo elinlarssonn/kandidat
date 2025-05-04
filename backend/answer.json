@@ -1,56 +1,54 @@
 [
   {
-    "userId": "edvin.gantelius@gmail.com",
-    "firstName": "edvin",
-    "lastName": "gantelius",
+    "userId": "Elin@g.se",
+    "firstName": "Elin",
+    "lastName": "Elin",
     "answers": {
       "1": "Studenter",
-      "2": "0-1 år",
-      "3": "Nej",
-      "4": [
-        "Hitta jobb"
-      ],
-      "5": [
-        "Folk med liknande yrkesroll"
-      ],
-      "6": [
-        "Tech & IT"
-      ],
-      "7": [
-        "Tech & IT"
-      ],
-      "8": [
-        "Programmering"
-      ]
-    },
-    "createdAt": "2025-05-03T16:13:55.953Z",
-    "index": 1
-  },
-  {
-    "userId": "sara@gmail.com",
-    "firstName": "sara",
-    "lastName": "movin",
-    "answers": {
-      "1": "Studenter",
-      "2": "0-1 år",
-      "3": "Nej",
+      "2": "1-3 år",
       "4": [
         "Rekrytera"
       ],
       "5": [
-        "Folk med liknande yrkesroll"
+        "Rekryterare"
       ],
       "6": [
-        "Tech & IT"
+        "Industri & produktion"
       ],
       "7": [
-        "Startups & entreprenörskap"
+        "Transport & logistik"
       ],
       "8": [
-        "Programmering"
+        "Utveckling"
       ]
     },
-    "createdAt": "2025-05-03T16:14:25.918Z",
+    "createdAt": "2025-05-04T14:55:39.534Z",
+    "index": 1
+  },
+  {
+    "userId": "e@hej.gse",
+    "firstName": "Elin",
+    "lastName": "Elin",
+    "answers": {
+      "1": "Studenter",
+      "2": "0-1 år",
+      "4": [
+        "Hitta samarbetspartners"
+      ],
+      "5": [
+        "Entreprenörer/startups"
+      ],
+      "6": [
+        "Startups & entreprenörskap"
+      ],
+      "7": [
+        "Transport & logistik"
+      ],
+      "8": [
+        "Kommunikation"
+      ]
+    },
+    "createdAt": "2025-05-04T14:56:04.368Z",
     "index": 2
   }
 ]
