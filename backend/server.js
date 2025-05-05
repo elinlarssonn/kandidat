@@ -78,17 +78,31 @@ app.post('/answers', (req, res) => {
     });
 });
 
-
+app.get('/has-answered', (req, res) => {
+    const userId = req.query.userId;
+    if (!userId) {
+        return res.status(400).send('UserId krävs.');
+    }
+ 
+ 
+    fs.readFile(DATA_FILE, 'utf8', (err, data) => {
+        if (err) {
+            return res.status(500).send('Kunde inte läsa svaren.');
+        }
+ 
+ 
+        const answers = JSON.parse(data || '[]');
+        const user = answers.find(person => person.userId === userId);
+        res.json({ hasAnswered: !!user && !!user.answers && Object.keys(user.answers).length > 0 });
+    });
+ });
 
 
 // Funktion för att beräkna matchningspoäng
 function calculateMatchScore(personA, personB) {
     let score = 0;
 
-
-    // FRÅGA 4
-
-    // 1. Komplementära intentioner
+    // Komplementära intentioner
     const intentionsA = personA.answers[4] || [];
     const intentionsB = personB.answers[4] || [];
     const complementaryIntentions = intentionsA.filter(intention =>
@@ -118,9 +132,10 @@ function calculateMatchScore(personA, personB) {
         (intention === "Hitta samarbetspartners" && intentionsB.includes("Träffa nya kontakter"))
     );
     score += projectCollaboration.length * 3; // Ge 3 poäng per projekt-samarbete
-
+    
+    console.log('intentioner:', complementaryIntentions);
+    console.log('komplemtära intentioner:', projectCollaboration); // Logga komplementära intentioner
     console.log('Total poäng, komplementära intentioner:', score); // Logga poängen
-    console.log('Total poäng fråga 4:', score); // Logga poängen
 
     //Fråga 3,5,6,7 - Mentor
     const currentUserWantsMentorsA = personA.answers[5]?.includes("Seniora yrkespersoner/mentorer");
@@ -147,29 +162,18 @@ function calculateMatchScore(personA, personB) {
         otherUserWantsToMentorA &&
         otherUserWorksInBranschA
         ) {
-            score += 4; // Öka poängen för denna matchning
+            score += 5; // Öka poängen för denna matchning
         } else if (
             currentUserWantsMentorsB &&
             currentUserInterestedInBranschB &&
             otherUserWantsToMentorB &&
             otherUserWorksInBranschB
         ){
-            score += 4; // Öka poängen för denna matchning
+            score += 5; // Öka poängen för denna matchning
         }
         
-        console.log('Poäng efter matchning med mentor', score); // Logga poängen
+        console.log('Total poäng efter matchning med mentor', score); // Logga poängen
 
-        //FRÅGA 5
-
-    // 2. Sökande yrkesroller (fråga 5)
-    const targetGroupsA = personA.answers[5] || [];
-    const targetGroupsB = personB.answers[5] || [];
-    const sharedTargetGroups = targetGroupsA.filter(group => targetGroupsB.includes(group));
-    score += sharedTargetGroups.length * 2;
-    console.log('Total poäng, mest intresserad av att prata med:', score); // Logga poängen
-
-
-    //FRÅGA 6 & 7
 
     // 3. Komplementära branscher (fråga 6 och 7)
     const industriesA = personA.answers[6] || [];
@@ -181,25 +185,22 @@ function calculateMatchScore(personA, personB) {
     const superMatch = industriesA.some(industry => desiredIndustriesB.includes(industry)) &&
                        industriesB.some(industry => desiredIndustriesA.includes(industry));
     if (superMatch) {
-        score += 10; 
+        score += 5; 
         console.log('Total poäng söker samma bransch, supermatch:', score); // Logga poängen
     }
-    //console.log('Poäng söker samma bransch, supermatch:', score); // Logga poängen
 
     const sharedIndustries = industriesA.some(industry => industriesB.includes(industry));
     if (sharedIndustries) {
-        score += 5;
+        score += 3;
         console.log('Total poäng, jobbar i samma bransch:', score); // Logga poängen
     }
 
     const overlapingInterests = industriesA.some(industry => desiredIndustriesB.includes(industry)) ||
                                 industriesB.some(industry => desiredIndustriesA.includes(industry));
     if (overlapingInterests) {
-        score += 3;
+        score += 2;
         console.log('Total poäng efter att ha kollar overlapingInterests:', score); //Logga poäng
     }
-
-    //FRÅGA 8
 
     // Gemensamma kompetenser (fråga 8)
     const skillsA = personA.answers[8] || [];
@@ -208,6 +209,38 @@ function calculateMatchScore(personA, personB) {
     score += sharedSkills.length * 1;
     console.log('Total poäng gemensamma kompetenser:', score); // Logga poängen
 
+    // FRÅGA 1 & 5 - Liknande yrkesroll och specifika målgrupper
+    const roleA = personA.answers[1];
+    const roleB = personB.answers[1];
+    const targetGroupsA = personA.answers[5] || [];
+    const targetGroupsB = personB.answers[5] || [];
+
+    // Matcha personer som vill prata med "Folk med liknande yrkesroll"
+    if (targetGroupsA.includes("Folk med liknande yrkesroll") && roleA === roleB) {
+        score += 2; // Ge 2 poäng för liknande yrkesroll
+    }
+    if (targetGroupsB.includes("Folk med liknande yrkesroll") && roleA === roleB) {
+        score += 2; // Ge 2 poäng för liknande yrkesroll
+    }
+
+    // Matcha personer som vill träffa en viss person med personer som har den yrkesrollen
+    targetGroupsA
+        .filter(target => ["Studenter","Nyexaminerade studenter", "Rekryterare", "Entreprenörer/startups", "VD"].includes(target))
+        .forEach(target => {
+            if (roleB === target) {
+                score += 2; // Ge 2 poäng för matchande yrkesroll
+            }
+        });
+
+    targetGroupsB
+        .filter(target => ["Studenter","Nyexaminerade studenter", "Rekryterare", "Entreprenörer/startups", "VD"].includes(target))
+        .forEach(target => {
+            if (roleA === target) {
+                score += 2; // Ge 2 poäng för matchande yrkesroll
+            }
+        });
+
+    console.log('Total poäng efter yrkesroll och målgruppsmatchning:', score); // Logga poängen
 
     return score; // Returnera den totala matchningspoängen
 }

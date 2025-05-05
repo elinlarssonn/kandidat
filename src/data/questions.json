@@ -21,7 +21,7 @@
         "id": 4,
         "type": "checkbox",
         "question": "Vad är ditt främsta mål med att delta på eventet? Välj max 3 alternativ",
-        "options": ["Hitta jobb", "Rekrytera", "Nya kunder", "Hitta samarbetspartners", "Bli inspererad", "Starta ett projekt", "Träffa nya kontakter", "Inget av ovanstående"]
+        "options": ["Hitta jobb", "Rekrytera", "Nya kunder", "Hitta samarbetspartners", "Bli inspirerad", "Starta ett projekt", "Träffa nya kontakter", "Inget av ovanstående"]
     },
     {
         "id": 5,
