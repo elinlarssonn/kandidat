@@ -83,11 +83,16 @@
         padding: 8px 12px;
       }
     
-      /* Alternativ (checkbox och radio) */
+      .options-grid {
+        grid-template-columns: 1fr; /* Endast 1 kolumn på mobil */
+        gap: 12px;
+        max-width: 95%;
+      }
+      
       .option {
         font-size: 16px;
       }
-    
+      
       .option input {
         transform: scale(1.2);
       }

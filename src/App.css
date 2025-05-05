@@ -248,12 +248,20 @@ button:hover {
   background-color: #e9ecef;
 }
 
+.options-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px 40px;
+  justify-content: center;
+  max-width: 700px;
+  margin: 0 auto 40px auto;
+}
+
 .option {
-  margin-bottom: 15px;
-  font-size: 18px;
-  color: #444;
   display: flex;
   align-items: center;
+  font-size: 18px;
+  color: #444;
 }
 
 .option input {

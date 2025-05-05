@@ -86,14 +86,14 @@ function Questions({ goTo, email }) {
 
   return (
     <div className="questions-page">
-      <h1>Frågor</h1>
+      <h1>Fyll in dina svar här</h1>
 
       {currentQuestionIndex === 0 ? (
         <div className="first-three">
           {firstThreeQuestions.map(q => (
             <div key={q.id} className="question-block">
               <label>{q.question}</label>
-              {q.id === 2 ? (
+              {q.id === 1 & 2 ? (
                 <select
                   value={answers[q.id] || ''}
                   onChange={e => handleDropdownChange(q.id, e.target.value)}
@@ -118,16 +118,22 @@ function Questions({ goTo, email }) {
                     </label>
                   ))}
                 </div>
-              ) : (
-                <select
-                  value={answers[q.id] || ''}
-                  onChange={e => handleDropdownChange(q.id, e.target.value)}
-                >
-                  <option value="">Välj</option>
-                  {q.options.map(option => (
-                    <option key={option} value={option}>{option}</option>
-                  ))}
-                </select>
+              ) : 
+              (
+                <Dropdown>
+                  <Dropdown.Toggle variant="success" id="dropdown-basic">
+                    {answers[q.id] || "Välj"}
+                  </Dropdown.Toggle>
+                  <Dropdown.Menu align="start">
+                    {q.options.map(option => (
+                      <Dropdown.Item
+                        key={option}
+                        onClick={() => handleDropdownChange(q.id, option)}>
+                        {option}
+                      </Dropdown.Item>
+                    ))}
+                  </Dropdown.Menu>
+                </Dropdown>
               )}
             </div>
           ))}
@@ -159,45 +165,47 @@ function Questions({ goTo, email }) {
         
         <div className="question">
           {currentQuestion && <p>{currentQuestion.question}</p>}
-          {currentQuestion && currentQuestion.id === 6 ? (
-            // Fråga 6: Endast en checkbox kan väljas
-            currentQuestion.options.map(option => (
+          <div className="options-grid">
+            {currentQuestion && currentQuestion.id === 6 ? (
+              // Fråga 6: Endast en checkbox kan väljas
+              currentQuestion.options.map(option => (
+                  <div key={option} className="option">
+                      <input
+                          type="checkbox"
+                          id={`${currentQuestion.id}-${option}`}
+                          checked={answers[currentQuestion.id]?.includes(option) || false}
+                          onChange={() => handleSingleCheckbox(currentQuestion.id, option)}
+                      />
+                      <label htmlFor={`${currentQuestion.id}-${option}`}>{option}</label>
+                  </div>
+              ))
+            ) : currentQuestion && currentQuestion.id === 7 ? (
+              // Fråga 7: Max tre checkboxar kan väljas
+              currentQuestion.options.map(option => (
                 <div key={option} className="option">
-                    <input
-                        type="checkbox"
-                        id={`${currentQuestion.id}-${option}`}
-                        checked={answers[currentQuestion.id]?.includes(option) || false}
-                        onChange={() => handleSingleCheckbox(currentQuestion.id, option)}
-                    />
-                    <label htmlFor={`${currentQuestion.id}-${option}`}>{option}</label>
+                  <input
+                    type="checkbox"
+                    id={`${currentQuestion.id}-${option}`}
+                    checked={answers[currentQuestion.id]?.includes(option) || false}
+                    onChange={() => handleAnswer(currentQuestion.id, option)}
+                  />
+                  <label htmlFor={`${currentQuestion.id}-${option}`}>{option}</label>
                 </div>
-            ))
-          ) : currentQuestion && currentQuestion.id === 7 ? (
-            // Fråga 7: Max tre checkboxar kan väljas
-            currentQuestion.options.map(option => (
+              ))
+            ) : (
+              currentQuestion && currentQuestion.options.map(option => (
                 <div key={option} className="option">
-                    <input
-                        type="checkbox"
-                        id={`${currentQuestion.id}-${option}`}
-                        checked={answers[currentQuestion.id]?.includes(option) || false}
-                        onChange={() => handleAnswer(currentQuestion.id, option)}
-                    />
-                    <label htmlFor={`${currentQuestion.id}-${option}`}>{option}</label>
+                  <input
+                    type="checkbox"
+                    id={`${currentQuestion.id}-${option}`}
+                    checked={answers[currentQuestion.id]?.includes(option) || false}
+                    onChange={() => handleAnswer(currentQuestion.id, option)}
+                  />
+                  <label htmlFor={`${currentQuestion.id}-${option}`}>{option}</label>
                 </div>
-            ))
-          ) : (
-            currentQuestion && currentQuestion.options.map(option => (
-              <div key={option} className="option">
-                <input
-                  type="checkbox"
-                  id={`${currentQuestion.id}-${option}`}
-                  checked={answers[currentQuestion.id]?.includes(option) || false}
-                  onChange={() => handleAnswer(currentQuestion.id, option)}
-                />
-                <label htmlFor={`${currentQuestion.id}-${option}`}>{option}</label>
-              </div>
-            ))
-          )}
+              ))
+            )}
+          </div>
           <Button
             label={currentQuestionIndex < remainingQuestions.length - 1 ? "Nästa fråga" : "Skicka in"}
             onClick={nextQuestion}
