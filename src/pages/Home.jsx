@@ -133,6 +133,16 @@ function User({ goTo, setEmail }) {
 
       // Skicka användarens namn och mejl till backend
       try {
+        // Kontrollera om användaren redan har svarat på frågorna
+        const checkResponse = await fetch(`http://localhost:5001/has-answered?userId=${encodeURIComponent(localEmail)}`);
+        const checkData = await checkResponse.json();
+
+        if (checkData.hasAnswered) {
+            console.log("Användaren har redan svarat på frågorna. Skickar till matchningsresultat.");
+            goTo(VIEW_RESULTS); // Skicka användaren direkt till matchningsresultat
+            return;
+        }
+        
         const response = await fetch('http://localhost:5001/answers', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
