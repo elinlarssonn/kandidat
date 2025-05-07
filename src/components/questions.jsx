@@ -1,11 +1,20 @@
 import React, { useState } from 'react';
 import Button from '../components/button';
 import Dropdown from 'react-bootstrap/Dropdown';
-import questions from '../data/questions.json';
+import questions from '../data/questions_sv.json';
+import { useLanguage } from '../LanguageContext';
+import sv from '../data/swe.json';
+import en from '../data/en.json';
 
 function Questions({ goTo, email }) {
+  const { t, language } = useLanguage(); 
+
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [answers, setAnswers] = useState({});
+  const translations = {
+    sv: sv,
+    en: en
+  };
 
   const handleAnswer = (questionId, option) => {
     setAnswers(prev => {
@@ -28,8 +37,8 @@ function Questions({ goTo, email }) {
 
   const handleSingleCheckbox = (questionId, option) => {
     setAnswers(prev => ({
-        ...prev,
-        [questionId]: [option], // Spara endast det valda alternativet som en array
+      ...prev,
+      [questionId]: [option],
     }));
   };
 
@@ -56,51 +65,47 @@ function Questions({ goTo, email }) {
   };
 
   const submitAnswers = async () => {
-    console.log("submitAnswers körs");
-    console.log("Svar som skickas:", answers);
     if (!email) {
-      alert('Du måste ange en mejladress först');
+      alert(t("write-email"));
       return;
     }
-    console.log("Mejladress som skickas som userId:", email);
-    console.log('Skickar följande svar till backend:', answers);
-    try {
-        const response = await fetch('http://localhost:5001/answers', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ userId: email, answers }),
-        });
-        const responseData = await response.text();
-        console.log('Svar från servern:', responseData);
-        goTo(5); // Gå till nästa vy
-    } catch (error) {
-        console.error('Kunde inte skicka svar:', error);
-    }
-};
 
-  // Första tre frågor
+    try {
+      const response = await fetch('http://localhost:5001/answers', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ userId: email, answers }),
+      });
+      await response.text();
+      goTo(5);
+    } catch (error) {
+      console.error('Kunde inte skicka svar:', error);
+    }
+  };
+
   const firstThreeQuestions = questions.slice(0, 2);
   const remainingQuestions = questions.slice(3);
-  const mentorQuestion = questions.find(q => q.id === 3); // Hämta mentorfrågan från JSON
+  const mentorQuestion = questions.find(q => q.id === 3);
   const currentQuestion = currentQuestionIndex > 0 ? remainingQuestions[currentQuestionIndex - 1] : null;
 
   return (
     <div className="questions-page">
-      <h1>Fyll in dina svar här</h1>
+      <h1>{t("fill-in-answers")}</h1>
 
       {currentQuestionIndex === 0 ? (
         <div className="first-three">
           {firstThreeQuestions.map(q => (
             <div key={q.id} className="question-block">
-              <label>{q.question}</label>
+              <label>{t(q.question)}</label>
+
               {q.id === 1 & 2 ? (
                 <select
                   value={answers[q.id] || ''}
                   onChange={e => handleDropdownChange(q.id, e.target.value)}
                 >
-                  <option value="" disabled>Välj ett alternativ</option>
+                  <option value="" disabled>{t("choose-option")}</option>
                   {q.options.map(option => (
-                    <option key={option} value={option}>{option}</option>
+                    <option key={option} value={option}>{t(option)}</option>
                   ))}
                 </select>
               ) : q.options.length <= 2 ? (
@@ -114,22 +119,22 @@ function Questions({ goTo, email }) {
                         checked={answers[q.id] === option}
                         onChange={() => handleRadioChange(q.id, option)}
                       />
-                      {option}
+                      {t(option)}
                     </label>
                   ))}
                 </div>
-              ) : 
-              (
+              ) : (
                 <Dropdown>
                   <Dropdown.Toggle variant="success" id="dropdown-basic">
-                    {answers[q.id] || "Välj"}
+                  {answers[q.id] ? t(answers[q.id]) :  t("choose-option")}
                   </Dropdown.Toggle>
                   <Dropdown.Menu align="start">
                     {q.options.map(option => (
                       <Dropdown.Item
                         key={option}
-                        onClick={() => handleDropdownChange(q.id, option)}>
-                        {option}
+                        onClick={() => handleDropdownChange(q.id, option)}
+                      >
+                        {t(option)}
                       </Dropdown.Item>
                     ))}
                   </Dropdown.Menu>
@@ -138,10 +143,9 @@ function Questions({ goTo, email }) {
             </div>
           ))}
 
-          {/* Visa mentorfrågan om erfarenhetsfrågan har ett specifikt svar */}
-          {(answers[2] === "3-5 år" || answers[2] === "5-10 år" || answers[2] === "10+ år") && mentorQuestion && (
+          {(answers[2] === "exp-3-5" || answers[2] === "exp-5-10" || answers[2] === "exp-10plus") && mentorQuestion && (
             <div className="question-block">
-              <label>{mentorQuestion.question}</label>
+              <label>{t(mentorQuestion.question)}</label>
               <div className="radio-group">
                 {mentorQuestion.options.map(option => (
                   <label key={option}>
@@ -152,62 +156,37 @@ function Questions({ goTo, email }) {
                       checked={answers[mentorQuestion.id] === option}
                       onChange={() => handleRadioChange(mentorQuestion.id, option)}
                     />
-                    {option}
+                    {t(option)}
                   </label>
                 ))}
               </div>
             </div>
           )}
 
-          <Button label="Nästa fråga" onClick={() => setCurrentQuestionIndex(1)} />
+          <Button label={t("next-question")} onClick={() => setCurrentQuestionIndex(1)} />
         </div>
       ) : (
-        
         <div className="question">
-          {currentQuestion && <p>{currentQuestion.question}</p>}
+          {currentQuestion && <p>{t(currentQuestion.question)}</p>}
           <div className="options-grid">
-            {currentQuestion && currentQuestion.id === 6 ? (
-              // Fråga 6: Endast en checkbox kan väljas
-              currentQuestion.options.map(option => (
-                  <div key={option} className="option">
-                      <input
-                          type="checkbox"
-                          id={`${currentQuestion.id}-${option}`}
-                          checked={answers[currentQuestion.id]?.includes(option) || false}
-                          onChange={() => handleSingleCheckbox(currentQuestion.id, option)}
-                      />
-                      <label htmlFor={`${currentQuestion.id}-${option}`}>{option}</label>
-                  </div>
-              ))
-            ) : currentQuestion && currentQuestion.id === 7 ? (
-              // Fråga 7: Max tre checkboxar kan väljas
-              currentQuestion.options.map(option => (
-                <div key={option} className="option">
-                  <input
-                    type="checkbox"
-                    id={`${currentQuestion.id}-${option}`}
-                    checked={answers[currentQuestion.id]?.includes(option) || false}
-                    onChange={() => handleAnswer(currentQuestion.id, option)}
-                  />
-                  <label htmlFor={`${currentQuestion.id}-${option}`}>{option}</label>
-                </div>
-              ))
-            ) : (
-              currentQuestion && currentQuestion.options.map(option => (
-                <div key={option} className="option">
-                  <input
-                    type="checkbox"
-                    id={`${currentQuestion.id}-${option}`}
-                    checked={answers[currentQuestion.id]?.includes(option) || false}
-                    onChange={() => handleAnswer(currentQuestion.id, option)}
-                  />
-                  <label htmlFor={`${currentQuestion.id}-${option}`}>{option}</label>
-                </div>
-              ))
-            )}
+            {currentQuestion && currentQuestion.options.map(option => (
+              <div key={option} className="option">
+                <input
+                  type="checkbox"
+                  id={`${currentQuestion.id}-${option}`}
+                  checked={answers[currentQuestion.id]?.includes(option) || false}
+                  onChange={() =>
+                    currentQuestion.id === 6
+                      ? handleSingleCheckbox(currentQuestion.id, option)
+                      : handleAnswer(currentQuestion.id, option)
+                  }
+                />
+                <label htmlFor={`${currentQuestion.id}-${option}`}>{t(option)}</label>
+              </div>
+            ))}
           </div>
           <Button
-            label={currentQuestionIndex < remainingQuestions.length - 1 ? "Nästa fråga" : "Skicka in"}
+            label={currentQuestionIndex < remainingQuestions.length - 1 ? t("next-question") : t("submit")}
             onClick={nextQuestion}
           />
         </div>

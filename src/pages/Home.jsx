@@ -3,6 +3,7 @@ import Button from '../components/button';
 import Questions from '../components/questions';
 import MatchResults from '../components/match'; // Importera MatchResults
 import Header from '../components/header'; 
+import { useLanguage } from '../LanguageContext';
 
 
 const VIEW_START = 1;
@@ -12,6 +13,7 @@ const VIEW_QUESTIONS = 4;
 const VIEW_RESULTS = 5; // Ny vy för matchningsresultat
 
 function Home() {
+    const { t } = useLanguage();
     const [view, setView] = useState(VIEW_START);
     const [email, setEmail] = useState(''); //state för att lagra mejl
   
@@ -20,35 +22,35 @@ function Home() {
 
         {view === VIEW_START && (
           <>
-            <Header title="Inför Eventet" />
+            <Header title={t("before-event")} />
             <StartPage goTo={setView} />
           </>
         )}
 
         {view === VIEW_CONSENT && (
           <>
-            <Header title="Samtycke" onBack={() => setView(VIEW_START)} />
+            <Header title={t("consent")}  onBack={() => setView(VIEW_START)} />
             <Consent goTo={setView} />
           </>
         )}
 
         {view === VIEW_USER && (
           <>
-            <Header title="Personuppgifter" onBack={() => setView(VIEW_CONSENT)} />
+            <Header title={t("personal-info")} onBack={() => setView(VIEW_CONSENT)} />
             <User goTo={setView} setEmail={setEmail} />
           </>
         )}
 
         {view === VIEW_QUESTIONS && (
           <>
-            <Header title="Frågor om dig" onBack={() => setView(VIEW_USER)} />
+            <Header title={t("question-about-you")} onBack={() => setView(VIEW_USER)} />
             <Questions goTo={setView} email={email} />
           </>
         )}
 
         {view === VIEW_RESULTS && (
           <>
-            <Header title="Dina matchningar" onBack={() => setView(VIEW_QUESTIONS)} />
+            <Header title={t("user-matches")} onBack={() => setView(VIEW_QUESTIONS)} />
             <MatchResults goTo={setView} userId={email} refresh={() => setView(VIEW_RESULTS)} />
           </>
         )}
@@ -59,27 +61,28 @@ function Home() {
   
 
 function StartPage({ goTo }) {
+  const { t, setLanguage } = useLanguage();
   return (
     <div className="start-content">
-      <h1>Frågor om dig</h1>
+      <h1>{t("question-about-you")}</h1>
       <p>
-        Svara gärna på några snabba frågor – det hjälper oss att matcha dig med
-        relevanta kontakter under eventet.
+        {t("answer-text")}
       </p>
-      <Button label="Starta" onClick={() => goTo(VIEW_CONSENT)} />
+      <Button label={t("start-button")} onClick={() => goTo(VIEW_CONSENT)} />
     </div>
   );
 }
 
 
 function Consent({ goTo }) {
+  const { t } = useLanguage();
   const [approved, setApproved] = useState(false);
 
   const handleClick = () => {
     if (approved) {
       goTo(VIEW_USER);
     } else {
-      alert("Du måste godkänna villkoren för att fortsätta. Tryck på det röda krysset om du inte godkänner villkoren.");
+      alert(t("alert-consent"));;
     }
   };
 
@@ -88,9 +91,7 @@ function Consent({ goTo }) {
 
       <div className="consent-box">
         <p>
-        Genom att delta och lämna dina svar samtycker du till att dina personuppgifter 
-        behandlas för att möjliggöra matchning med relevanta nätverkskontakter. 
-        Behandlingen sker i enlighet med gällande dataskyddslagstiftning.
+        {t("consent-info")}
         </p>
 
         <div className="checkbox-container">
@@ -99,16 +100,17 @@ function Consent({ goTo }) {
             checked={approved}
             onChange={(e) => setApproved(e.target.checked)}
           />
-          <label>Jag godkänner villkoren</label>
+          <label>{t("approve-consent")}</label>
         </div>
 
-        <button onClick={handleClick}>Starta</button>
+        <button onClick={handleClick}>{t("start-button")}</button>
         <button className="close-button" onClick={() => goTo(VIEW_START)}>✖️</button>
       </div>
     </div>
   );
 }
 function User({ goTo, setEmail }) {
+    const { t, setLanguage } = useLanguage();
     const [firstName, setFirstName] = useState('');
     const [lastName, setLastName] = useState('');
     const [localEmail, setLocalEmail] = useState(''); // Lokal state för mejladressen
@@ -120,11 +122,11 @@ function User({ goTo, setEmail }) {
 
     const handleContinue = async () => {
       if (!firstName || !localEmail) {
-        alert("Fyll i förnamn och e-mail");
+        alert(t("write-email"));
         return;
       }
       if (!isValidEmail(localEmail)) {
-        alert("Ange en giltig e-postadress");
+        alert(t("valid-email-alert"));
         return;
       }
 
@@ -164,37 +166,37 @@ function User({ goTo, setEmail }) {
     return (
         <div className="user-info-form">
             <div>
-            <h1>Personuppgifter</h1>
-            <label>Förnamn</label>
+            <h1>{t("personal-info")}</h1>
+            <label>{t("first-name")}</label>
             <input
                 type="text"
                 value={firstName}
                 onChange={e => setFirstName(e.target.value)}
-                placeholder="Skriv ditt förnamn"
+                placeholder={t("write-first-name")}
             />
             </div>
 
             <div>
-            <label>Efternamn</label>
+            <label>{t("last-name")}</label>
             <input
                 type="text"
                 value={lastName}
                 onChange={e => setLastName(e.target.value)}
-                placeholder="Skriv ditt efternamn"
+                placeholder={t("write-last-name")}
             />
             </div>
 
             <div>
-            <label>E-postadress</label>
+            <label>{t("email")}</label>
             <input
                 type="email"
                 value={localEmail}
                 onChange={e => setLocalEmail(e.target.value)}
-                placeholder="mejl@example.com"
+                placeholder={t("example-emial")}
             />
             </div>
 
-            <Button label="Gå vidare" onClick={handleContinue} />
+            <Button label={t("move-on")} onClick={handleContinue} />
         </div>
   );
 }

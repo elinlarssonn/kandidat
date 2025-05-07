@@ -1,0 +1,57 @@
+[
+    {
+        "id": 1,
+        "type": "dropdown",
+        "question": "question-role", 
+        "options": ["role-student", "role-graduate", "role-recruiter", "role-entrepreneur", "role-ceo", "role-projectmanager", "role-admin", "role-developer", "role-analyst", "role-economist", "role-consultant", "role-engineer", "role-sales"]
+    },
+    {
+        "id": 2,
+        "type": "checkbox",
+        "question": "question-experience",
+        "options": ["exp-0-1", "exp-1-3", "exp-3-5", "exp-5-10", "exp-10plus"]
+    },
+    {
+        "id": 3,
+        "type": "dropdown",
+        "question": "question-mentor",
+        "options": ["yes", "no"]
+    },
+    {
+        "id": 4,
+        "type": "checkbox",
+        "question": "question-main-goal",
+        "options": ["goal-job", "goal-recruit", "goal-customers", "goal-partners", "goal-inspiration", "goal-project", "goal-contacts", "goal-none"]
+    },
+      
+    {
+        "id": 5,
+        "type": "checkbox",
+        "question": "question-person-type",
+        "options": ["type-similar-role", "type-senior", "type-student", "type-graduate", "type-entrepreneur", "type-recruiter", "type-ceo", "type-none"]
+    },
+    {
+        "id": 6,
+        "type": "checkbox",
+        "question": "question-industry",
+        "options": ["industry-tech", "industry-creative", "industry-education", "industry-health", "industry-finance", "industry-startups", "industry-public", "industry-production", "industry-energy", "industry-trade", "industry-tourism", "industry-transport", "industry-hr", "industry-construction", "industry-unemployed"]
+    },
+    {
+        "id": 7,
+        "type": "checkbox",
+        "question": "question-find-people-industry",
+        "options": ["industry-tech", "industry-creative", "industry-education", "industry-health", "industry-finance", "industry-startups", "industry-public", "industry-production", "industry-energy", "industry-trade", "industry-tourism", "industry-transport", "industry-hr", "industry-construction", "industry-unemployed"]
+    },
+    {
+        "id": 8,
+        "type": "checkbox",
+        "question": "question-skills",
+        "options": ["skill-programming", "skill-design", "skill-project", "skill-marketing", "skill-sales", "skill-analysis", "skill-leadership", "skill-research", "skill-development", "skill-strategy", "skill-communication", "skill-finance", "skill-copywriting"]
+    },
+    {
+        "id": 9,
+        "type": "checkbox",
+        "question": "question-interest-areas",
+        "options": ["skill-programming", "skill-design", "skill-project", "skill-marketing", "skill-sales", "skill-analysis", "skill-leadership", "skill-research", "skill-development", "skill-strategy", "skill-communication", "skill-finance", "skill-copywriting"]
+    }
+  ]

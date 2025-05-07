@@ -7,15 +7,19 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 
+import {LanguageProvider} from './LanguageContext';
+
 function App() {
   return (
-    <Router>
-      <Routes>
-        <Route path="/" element={<Home />} />
-      </Routes>
-    </Router>
-
+    <LanguageProvider> {}
+      <Router>
+        <Routes>
+          <Route path="/" element={<Home />} />
+        </Routes>
+      </Router>
+    </LanguageProvider>
   );
 }
 
 export default App;
+

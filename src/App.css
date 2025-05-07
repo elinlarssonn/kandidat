@@ -71,6 +71,22 @@
   font-weight: 600;
 }
 
+.language-flags {
+  position: absolute;
+  right: 20px;
+  bottom: -10px;
+  display: flex;
+}
+
+.language-flags button {
+  background: transparent !important;
+  border: none;
+  font-size: 20px;
+  cursor: pointer;
+  transition: transform 0.2s ease;
+}
+
+
 .home-page{
   background-color: #58af4f;
   text-align: center;
@@ -96,6 +112,7 @@ button{
 button:hover {
   background-color: #1b7749;
 }
+
 
 .start-content {
   padding-top: 80px;
