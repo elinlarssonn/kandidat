@@ -6,15 +6,15 @@ import Header from '../components/header';
 import { useLanguage } from '../LanguageContext';
 
 
-const VIEW_START = 1;
-const VIEW_CONSENT = 2;
-const VIEW_USER = 3;
-const VIEW_QUESTIONS = 4;
-const VIEW_RESULTS = 5; // Ny vy för matchningsresultat
+const VIEW_START = 2;
+//const VIEW_CONSENT = 2;
+const VIEW_USER = 1;
+const VIEW_QUESTIONS = 3;
+const VIEW_RESULTS = 4; // Ny vy för matchningsresultat
 
 function Home() {
     const { t } = useLanguage();
-    const [view, setView] = useState(VIEW_START);
+    const [view, setView] = useState(VIEW_USER);
     const [email, setEmail] = useState(''); //state för att lagra mejl
   
     return (
@@ -27,23 +27,17 @@ function Home() {
           </>
         )}
 
-        {view === VIEW_CONSENT && (
-          <>
-            <Header title={t("consent")}  onBack={() => setView(VIEW_START)} />
-            <Consent goTo={setView} />
-          </>
-        )}
 
         {view === VIEW_USER && (
           <>
-            <Header title={t("personal-info")} onBack={() => setView(VIEW_CONSENT)} />
+            <Header title={t("personal-info")} onBack={() => setView(VIEW_START)} />
             <User goTo={setView} setEmail={setEmail} />
           </>
         )}
 
         {view === VIEW_QUESTIONS && (
           <>
-            <Header title={t("question-about-you")} onBack={() => setView(VIEW_USER)} />
+            <Header title={t("question-about-you")} onBack={() => setView(VIEW_RESULTS)} />
             <Questions goTo={setView} email={email} />
           </>
         )}
@@ -68,7 +62,7 @@ function StartPage({ goTo }) {
       <p>
         {t("answer-text")}
       </p>
-      <Button label={t("start-button")} onClick={() => goTo(VIEW_CONSENT)} />
+      <Button label={t("start-button")} onClick={() => goTo(VIEW_QUESTIONS)} />
     </div>
   );
 }
@@ -111,94 +105,67 @@ function Consent({ goTo }) {
 }
 function User({ goTo, setEmail }) {
     const { t, setLanguage } = useLanguage();
-    const [firstName, setFirstName] = useState('');
-    const [lastName, setLastName] = useState('');
     const [localEmail, setLocalEmail] = useState(''); // Lokal state för mejladressen
-  
+    const [errorMessage, setErrorMessage] = useState("");
+
     const isValidEmail = (email) => {
       const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
       return emailRegex.test(email);
     };
 
     const handleContinue = async () => {
-      if (!firstName || !localEmail) {
-        alert(t("write-email"));
-        return;
-      }
-      if (!isValidEmail(localEmail)) {
-        alert(t("valid-email-alert"));
-        return;
-      }
-
-      // Spara mejladressen i Home.jsx via setEmail
-      setEmail(localEmail);
-
-      // Skicka användarens namn och mejl till backend
-      try {
-        // Kontrollera om användaren redan har svarat på frågorna
-        const checkResponse = await fetch(`http://localhost:5001/has-answered?userId=${encodeURIComponent(localEmail)}`);
-        const checkData = await checkResponse.json();
-
-        if (checkData.hasAnswered) {
-            console.log("Användaren har redan svarat på frågorna. Skickar till matchningsresultat.");
-            goTo(VIEW_RESULTS); // Skicka användaren direkt till matchningsresultat
+        if (!localEmail) {
+            setErrorMessage(t("write-email"));
             return;
         }
-        
-        const response = await fetch('http://localhost:5001/answers', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            userId: localEmail,
-            firstName,
-            lastName,
-          }),
-        });
-        const responseData = await response.text();
-        console.log('Svar från servern:', responseData);
-      } catch (error) {
-        console.error('Kunde inte skicka användaruppgifter:', error);
-      }
+        if (!isValidEmail(localEmail)) {
+            setErrorMessage(t("valid-email-alert"));
+            return;
+        }
 
-      goTo(VIEW_QUESTIONS); 
+        try {
+            const checkResponse = await fetch(`http://localhost:5001/has-answered?userId=${encodeURIComponent(localEmail)}`);
+            const checkData = await checkResponse.json();
+
+            if (!checkData.exists) {
+                setErrorMessage(t("email-not-exist")); // Visar felmeddelande om mejlen inte existerar
+                return;
+            }
+
+            if (checkData.hasAnswered) {
+                console.log("Användaren har redan svarat på frågorna. Skickar till matchningsresultat.");
+                setEmail(localEmail); // Spara mejladressen
+                goTo(VIEW_RESULTS); // Skicka användaren till matchningssidan
+                return;
+            }
+
+            console.log("Användaren har inte svarat på frågorna. Skickar till frågorna.");
+            setEmail(localEmail); // Spara mejladressen
+            goTo(VIEW_QUESTIONS); // Skicka användaren till frågorna
+        } catch (error) {
+            console.error('Kunde inte verifiera användarens e-postadress:', error);
+            setErrorMessage(t("error-message"));
+        }
     };
 
     return (
         <div className="user-info-form">
             <div>
-            <h1>{t("personal-info")}</h1>
-            <label>{t("first-name")}</label>
-            <input
-                type="text"
-                value={firstName}
-                onChange={e => setFirstName(e.target.value)}
-                placeholder={t("write-first-name")}
-            />
+                <label>{t("email")}</label>
+                <input
+                    type="email"
+                    value={localEmail}
+                    onChange={(e) => {
+                        setLocalEmail(e.target.value);
+                        setErrorMessage("");
+                    }}
+                    placeholder={t("example-email")}
+                />
+                {errorMessage && <p className="error-message">{errorMessage}</p>}
             </div>
-
-            <div>
-            <label>{t("last-name")}</label>
-            <input
-                type="text"
-                value={lastName}
-                onChange={e => setLastName(e.target.value)}
-                placeholder={t("write-last-name")}
-            />
-            </div>
-
-            <div>
-            <label>{t("email")}</label>
-            <input
-                type="email"
-                value={localEmail}
-                onChange={e => setLocalEmail(e.target.value)}
-                placeholder={t("example-emial")}
-            />
-            </div>
-
             <Button label={t("move-on")} onClick={handleContinue} />
         </div>
-  );
+    );
 }
 
 

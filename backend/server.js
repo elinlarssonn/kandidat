@@ -52,10 +52,8 @@ app.post('/answers', (req, res) => {
         if (existingUserIndex !== -1) {
             // Uppdatera befintlig användare
             answers[existingUserIndex] = {
-                ...answers[existingUserIndex], // Behåll befintliga fält
-                firstName: newAnswer.firstName || answers[existingUserIndex].firstName,
-                lastName: newAnswer.lastName || answers[existingUserIndex].lastName,
-                answers: newAnswer.answers, // Uppdatera svar
+                ...answers[existingUserIndex],
+                answers: { ...answers[existingUserIndex].answers, ...newAnswer.answers }, // Uppdatera svar
                 createdAt: newAnswer.createdAt, // Uppdatera tidsstämpel
             };
             console.log('Uppdaterade befintlig användare:', answers[existingUserIndex]);
@@ -83,20 +81,21 @@ app.get('/has-answered', (req, res) => {
     if (!userId) {
         return res.status(400).send('UserId krävs.');
     }
- 
- 
+
     fs.readFile(DATA_FILE, 'utf8', (err, data) => {
         if (err) {
             return res.status(500).send('Kunde inte läsa svaren.');
         }
- 
- 
+
         const answers = JSON.parse(data || '[]');
         const user = answers.find(person => person.userId === userId);
-        res.json({ hasAnswered: !!user && !!user.answers && Object.keys(user.answers).length > 0 });
-    });
- });
 
+        res.json({
+            exists: !!user, // Om användaren finns
+            hasAnswered: !!user && !!user.answers && Object.keys(user.answers).length > 0 // Om användaren har svarat
+        });
+    });
+});
 
 // Funktion för att beräkna matchningspoäng
 function calculateMatchScore(personA, personB) {
@@ -106,30 +105,30 @@ function calculateMatchScore(personA, personB) {
     const intentionsA = personA.answers[4] || [];
     const intentionsB = personB.answers[4] || [];
     const complementaryIntentions = intentionsA.filter(intention =>
-        (intention === "Hitta jobb" && intentionsB.includes("Rekrytera")) ||
-        (intention === "Rekrytera" && intentionsB.includes("Hitta jobb")) ||
-        (intention === "Hitta samarbetspartners" && intentionsB.includes("Hitta samarbetspartners")) ||
-        (intention === "Träffa nya kontakter" && intentionsB.includes("Träffa nya kontakter")) ||
-        (intention === "Starta ett projekt" && intentionsB.includes("Starta ett projekt"))
+        (intention === "goal-job" && intentionsB.includes("goal-recruit")) ||
+        (intention === "goal-recruit" && intentionsB.includes("goal-job")) ||
+        (intention === "goal-partners" && intentionsB.includes("goal-partners")) ||
+        (intention === "goal-contacts" && intentionsB.includes("goal-contacts")) ||
+        (intention === "goal-project" && intentionsB.includes("goal-project"))
     );
     score += complementaryIntentions.length * 5; // Ge 5 poäng per komplementär intention
 
     // Komplementära intentioner, helt ok match?
     const projectCollaboration = intentionsA.filter(intention =>
-        (intention === "Hitta samarbetspartners" && intentionsB.includes("Starta ett projekt")) ||
-        (intention === "Starta ett projekt" && intentionsB.includes("Hitta samarbetspartners"))||
+        (intention === "goal-partners" && intentionsB.includes("goal-project")) ||
+        (intention === "goal-project" && intentionsB.includes("goal-partners"))||
 
-        (intention === "Bli inspirerad" && intentionsB.includes("Träffa nya kontakter"))||
-        (intention === "Träffa nya kontakter" && intentionsB.includes("Bli inspirerad"))||
+        (intention === "goal-inspiration" && intentionsB.includes("goal-contacts"))||
+        (intention === "goal-contacts" && intentionsB.includes("goal-inspiration"))||
 
-        (intention === "Nya kunder" && intentionsB.includes("Hitta samarbetspartners"))||
-        (intention === "Hitta samarbetspartner" && intentionsB.includes("Nya kunder"))||
+        (intention === "goal-customers" && intentionsB.includes("goal-partners"))||
+        (intention === "goal-partners" && intentionsB.includes("goal-customers"))||
 
-        (intention === "Nya kunder" && intentionsB.includes("Träffa nya kontakter"))||
-        (intention === "Träffa nya kontakter" && intentionsB.includes("Nya kunder"))||
+        (intention === "goal-customers" && intentionsB.includes("goal-contacts"))||
+        (intention === "goal-contacts" && intentionsB.includes("goal-customers"))||
 
-        (intention === "Träffa nya kontakter" && intentionsB.includes("Hitta samarbetspartners"))||
-        (intention === "Hitta samarbetspartners" && intentionsB.includes("Träffa nya kontakter"))
+        (intention === "goal-contacts" && intentionsB.includes("goal-partners"))||
+        (intention === "goal-partners" && intentionsB.includes("goal-contacts"))
     );
     score += projectCollaboration.length * 3; // Ge 3 poäng per projekt-samarbete
     
@@ -138,20 +137,20 @@ function calculateMatchScore(personA, personB) {
     console.log('Total poäng, komplementära intentioner:', score); // Logga poängen
 
     //Fråga 3,5,6,7 - Mentor
-    const currentUserWantsMentorsA = personA.answers[5]?.includes("Seniora yrkespersoner/mentorer");
+    const currentUserWantsMentorsA = personA.answers[5]?.includes("type-senior");
     const currentUserInterestedInBranschA = personA.answers[7]?.some(bransch =>
             personB.answers[6]?.includes(bransch)
         );
-    const otherUserWantsToMentorA = personB.answers[3] === "Ja";
+    const otherUserWantsToMentorA = personB.answers[3] === "yes";
     const otherUserWorksInBranschA = personB.answers[6]?.some(bransch =>
             personA.answers[7]?.includes(bransch)
         );
 
-    const currentUserWantsMentorsB = personB.answers[5]?.includes("Seniora yrkespersoner/mentorer");
+    const currentUserWantsMentorsB = personB.answers[5]?.includes("type-senior");
     const currentUserInterestedInBranschB = personB.answers[7]?.some(bransch =>
             personA.answers[6]?.includes(bransch)
         );
-    const otherUserWantsToMentorB = personA.answers[3] === "Ja";
+    const otherUserWantsToMentorB = personA.answers[3] === "yes";
     const otherUserWorksInBranschB = personA.answers[6]?.some(bransch =>
             personB.answers[7]?.includes(bransch)
         );
@@ -216,16 +215,16 @@ function calculateMatchScore(personA, personB) {
     const targetGroupsB = personB.answers[5] || [];
 
     // Matcha personer som vill prata med "Folk med liknande yrkesroll"
-    if (targetGroupsA.includes("Folk med liknande yrkesroll") && roleA === roleB) {
+    if (targetGroupsA.includes("type-similar-role") && roleA === roleB) {
         score += 2; // Ge 2 poäng för liknande yrkesroll
     }
-    if (targetGroupsB.includes("Folk med liknande yrkesroll") && roleA === roleB) {
+    if (targetGroupsB.includes("type-similar-role") && roleA === roleB) {
         score += 2; // Ge 2 poäng för liknande yrkesroll
     }
 
     // Matcha personer som vill träffa en viss person med personer som har den yrkesrollen
     targetGroupsA
-        .filter(target => ["Studenter","Nyexaminerade studenter", "Rekryterare", "Entreprenörer/startups", "VD"].includes(target))
+        .filter(target => ["type-student","type-graduate", "type-recruiter", "type-entrepreneur", "type-ceo"].includes(target))
         .forEach(target => {
             if (roleB === target) {
                 score += 2; // Ge 2 poäng för matchande yrkesroll
@@ -233,7 +232,7 @@ function calculateMatchScore(personA, personB) {
         });
 
     targetGroupsB
-        .filter(target => ["Studenter","Nyexaminerade studenter", "Rekryterare", "Entreprenörer/startups", "VD"].includes(target))
+        .filter(target => ["type-student","type-graduate", "type-recruiter", "type-entrepreneur", "type-ceo"].includes(target))
         .forEach(target => {
             if (roleA === target) {
                 score += 2; // Ge 2 poäng för matchande yrkesroll

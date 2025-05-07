@@ -77,7 +77,7 @@ function Questions({ goTo, email }) {
         body: JSON.stringify({ userId: email, answers }),
       });
       await response.text();
-      goTo(5);
+      goTo(4);
     } catch (error) {
       console.error('Kunde inte skicka svar:', error);
     }
