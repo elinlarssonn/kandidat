@@ -104,6 +104,16 @@
 "skill-finance": "Economy",
 "skill-copywriting": "Copywriting",
 
-"question-interest-areas": "What areas are you most interested in right now? Choose up to 3 options"
+"question-interest-areas": "What areas are you most interested in right now? Choose up to 3 options",
+
+"match-result":"Match result for",
+"your-matches":"You have matched with",
+"with":"with",
+"points":"points",
+"info-about":"Information about",
+"name":"Name",
+"close-button":"Close",
+"alert-chat-one":"Chat with",
+"alert-chat-two":"is opening (implement chatfunction here)."
 
 }

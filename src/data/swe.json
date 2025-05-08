@@ -104,6 +104,17 @@
 "skill-finance": "Ekonomi",
 "skill-copywriting": "Copywriting",
 
-"question-interest-areas": "Vilka områden intresserar dig mest just nu? Välj max 3 alternativ"
+"question-interest-areas": "Vilka områden intresserar dig mest just nu? Välj max 3 alternativ",
+
+"match-result":"Matchningsresultat för",
+"your-matches":"Du har matchat med ",
+"with":"med",
+"points":"poäng",
+"info-about":"Information om",
+"name":"Namn",
+"close-button":"Stäng",
+"alert-chat-one":"Chatt med",
+"alert-chat-two":"öppnas (implementera chattfunktion här)."
+
 
 }

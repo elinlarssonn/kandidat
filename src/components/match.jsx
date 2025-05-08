@@ -1,9 +1,14 @@
 import React, { useState } from 'react';
 import Button from '../components/button';
+import { useLanguage } from '../LanguageContext';
+
+
 
 function MatchResults({ goTo, userId }) {
     const [results, setResults] = useState([]);
     const [selectedUser, setSelectedUser] = useState(null); // För att hantera popup för information
+    const { t } = useLanguage();
+    
 
     React.useEffect(() => {
         fetchResults();
@@ -33,7 +38,7 @@ function MatchResults({ goTo, userId }) {
     const openChat = (userId) => {
         // Här kan du länka till en chattfunktion, t.ex. en ny sida eller modal
         console.log(`Öppnar chatt med ${userId}`);
-        alert(`Chatt med ${userId} öppnas (implementera chattfunktion här).`);
+        alert(`${t("alert-chat-one")} ${userId}. ${t("alert-chat-two")}`);
     };
 
     // Hämta användarens namn från resultaten
@@ -41,11 +46,11 @@ function MatchResults({ goTo, userId }) {
 
     return (
         <div className="match-results">
-            <h1>Matchningsresultat för {userName}</h1>
+            <h1>{t("match-result")} {userName}</h1>
             <ul>
                 {results.map((result, index) => (
                     <li key={index} className="match-item">
-                        Du har matchat med {result.userB.firstName} {result.userB.lastName} med {result.matchScore} poäng
+                        {t("your-matches")}{result.userB.firstName} {result.userB.lastName} {t("with")} {result.matchScore} {t("points")}
                         <button className="info-button" onClick={() => openInfoPopup(result.userB)}>
                             ℹ️
                         </button>
@@ -62,10 +67,10 @@ function MatchResults({ goTo, userId }) {
             {selectedUser && (
                 <div className="info-popup">
                     <div className="info-popup-content">
-                        <h2>Information om {selectedUser.firstName} {selectedUser.lastName}</h2>
-                        <p><strong>Mejl:</strong> {selectedUser.userId}</p>
-                        <p><strong>Namn:</strong> {selectedUser.firstName} {selectedUser.lastName}</p>
-                        <button onClick={closeInfoPopup}>Stäng</button>
+                        <h2>{t("info-about")} {selectedUser.firstName} {selectedUser.lastName}</h2>
+                        <p><strong>{t("email")}:</strong> {selectedUser.userId}</p>
+                        <p><strong>{t("name")}:</strong> {selectedUser.firstName} {selectedUser.lastName}</p>
+                        <button onClick={closeInfoPopup}>{t("close-button")}</button>
                     </div>
                 </div>
             )}
