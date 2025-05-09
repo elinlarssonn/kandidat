@@ -63,6 +63,42 @@
       .question-block label {
         font-size: 16px;
       }
+
+      .question-progress {
+        display: flex;
+        justify-content: center;
+        flex-wrap: nowrap;
+        gap: 8px;
+        margin-bottom: 24px;
+      }
+      
+      .step-circle {
+        width: 30px;
+        height: 30px;
+        padding: 0;
+        border-radius: 50%;
+        border: none;
+        background-color: #e0e0e0;
+        color: black;
+        font-weight: bold;
+        font-size: 12px;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      
+      .step-circle.answered {
+        background-color: #4a6d81;
+        color: white;
+      }
+      
+      .step-circle.current {
+        background-color: #2cc345;
+        color: white;
+        outline: 2px solid white;
+        box-shadow: 0 0 0 2px #2cc345;
+      }
     
       /* Dropdown / Select */
       .question-block select,
@@ -83,14 +119,28 @@
         padding: 8px 12px;
       }
     
+      .question-text {
+        text-align: center;
+        margin-bottom: 16px;
+      }
+      
+      .answer-options {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      }
+      
       .options-grid {
-        grid-template-columns: 1fr; /* Endast 1 kolumn på mobil */
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start; /* eller center */
         gap: 12px;
-        max-width: 95%;
       }
       
       .option {
-        font-size: 16px;
+        font-size: 14px;
+        line-height: 1.2;
+        margin-bottom: 6px;
       }
       
       .option input {

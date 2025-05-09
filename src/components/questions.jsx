@@ -90,6 +90,28 @@ function Questions({ goTo, email }) {
 
   return (
     <div className="questions-page">
+      <div className="question-progress">
+        <QuestionProgressCircleRow
+          questions={firstThreeQuestions}
+          active={currentQuestionIndex === 0}
+          answered={firstThreeQuestions.some(q => answers[q.id] !== undefined)}
+          onClick={() => setCurrentQuestionIndex(0)}
+          index={1}
+        />
+        
+        {remainingQuestions.map((question, i) => (
+        <QuestionProgressCircleRow
+          key={question.id}
+          questions={[question]}
+          active={currentQuestionIndex === i + 1}
+          answered={answers[question.id] !== undefined}
+          onClick={() => setCurrentQuestionIndex(i + 1)}
+          index={i + 2}
+        />
+        ))}
+      </div>
+      
+      
       <h1>{t("fill-in-answers")}</h1>
 
       {currentQuestionIndex === 0 ? (
@@ -167,23 +189,28 @@ function Questions({ goTo, email }) {
         </div>
       ) : (
         <div className="question">
-          {currentQuestion && <p>{t(currentQuestion.question)}</p>}
-          <div className="options-grid">
-            {currentQuestion && currentQuestion.options.map(option => (
-              <div key={option} className="option">
-                <input
-                  type="checkbox"
-                  id={`${currentQuestion.id}-${option}`}
-                  checked={answers[currentQuestion.id]?.includes(option) || false}
-                  onChange={() =>
-                    currentQuestion.id === 6
-                      ? handleSingleCheckbox(currentQuestion.id, option)
-                      : handleAnswer(currentQuestion.id, option)
-                  }
-                />
-                <label htmlFor={`${currentQuestion.id}-${option}`}>{t(option)}</label>
-              </div>
-            ))}
+<div className="question-text">
+  {currentQuestion && <p>{t(currentQuestion.question)}</p>}
+</div>
+
+<div className="answer-options">
+  <div className="options-grid">
+    {currentQuestion && currentQuestion.options.map(option => (
+      <div key={option} className="option">
+        <input
+          type="checkbox"
+          id={`${currentQuestion.id}-${option}`}
+          checked={answers[currentQuestion.id]?.includes(option) || false}
+          onChange={() =>
+            currentQuestion.id === 6
+              ? handleSingleCheckbox(currentQuestion.id, option)
+              : handleAnswer(currentQuestion.id, option)
+          }
+        />
+        <label htmlFor={`${currentQuestion.id}-${option}`}>{t(option)}</label>
+      </div>
+    ))}
+</div>
           </div>
           <Button
             label={currentQuestionIndex < remainingQuestions.length - 1 ? t("next-question") : t("submit")}
@@ -194,5 +221,40 @@ function Questions({ goTo, email }) {
     </div>
   );
 }
+
+function QuestionProgressCircleRow({ questions, active, answered, onClick, index }) {
+  return (
+    <button
+      className={`step-circle ${active ? "current" : ""} ${answered ? "answered" : ""}`}
+      onClick={onClick}
+    >
+      {answered ? "✓" : index}
+    </button>
+  );
+}
+
+function QuestionProgress({remainingQuestions, current, answers, onNavigate }) {
+  const totalSteps = 1 + remainingQuestions.length; // första sidan + resten
+
+  return (
+    <div className="question-progress">
+      {remainingQuestions.map((question, index) => {
+        const isAnswered = answers[question.id];
+        const isCurrent = index === current;
+
+        return (
+          <button
+            key={index}
+            className={`step-circle ${isCurrent ? "current" : ""} ${isAnswered ? "answered" : ""}`}
+            onClick={() => onNavigate(index)}
+          >
+            {isAnswered ? "✓" : index + 1}
+          </button>
+        );
+      })}
+    </div>
+  );
+}
+
 
 export default Questions;

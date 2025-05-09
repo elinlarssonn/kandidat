@@ -57,8 +57,27 @@
     "userId": "hej@mil.lo",
     "firstName": "Sara",
     "lastName": null,
-    "answers": {},
-    "createdAt": "2025-05-07T09:56:17.719Z",
+    "answers": {
+      "1": "role-recruiter",
+      "2": "exp-5-10",
+      "3": "yes",
+      "4": [
+        "goal-job"
+      ],
+      "5": [
+        "type-similar-role"
+      ],
+      "6": [
+        "industry-finance"
+      ],
+      "7": [
+        "industry-tourism"
+      ],
+      "8": [
+        "skill-copywriting"
+      ]
+    },
+    "createdAt": "2025-05-09T13:07:23.870Z",
     "index": 3
   },
   {
@@ -163,12 +182,31 @@
       "1": "role-analyst",
       "2": "exp-5-10",
       "3": "no",
-      "4": ["goal-contacts", "goal-inspiration"],
-      "5": ["type-student", "type-ceo"],
-      "6": ["industry-finance", "industry-public"],
-      "7": ["industry-tech", "industry-finance"],
-      "8": ["skill-analysis", "skill-strategy", "skill-communication"],
-      "9": ["skill-strategy", "skill-finance"]
+      "4": [
+        "goal-contacts",
+        "goal-inspiration"
+      ],
+      "5": [
+        "type-student",
+        "type-ceo"
+      ],
+      "6": [
+        "industry-finance",
+        "industry-public"
+      ],
+      "7": [
+        "industry-tech",
+        "industry-finance"
+      ],
+      "8": [
+        "skill-analysis",
+        "skill-strategy",
+        "skill-communication"
+      ],
+      "9": [
+        "skill-strategy",
+        "skill-finance"
+      ]
     },
     "createdAt": "2025-05-08T10:01:00.000Z",
     "index": 8
@@ -181,14 +219,29 @@
       "1": "role-developer",
       "2": "exp-1-3",
       "3": "yes",
-      "4": ["goal-job"],
-      "5": ["type-similar-role"],
-      "6": ["industry-tech", "industry-creative"],
-      "7": ["industry-creative"],
-      "8": ["skill-design", "skill-development"],
-      "9": ["skill-design", "skill-communication"]
+      "4": [
+        "goal-job"
+      ],
+      "5": [
+        "type-similar-role"
+      ],
+      "6": [
+        "industry-tech",
+        "industry-creative"
+      ],
+      "7": [
+        "industry-creative"
+      ],
+      "8": [
+        "skill-design",
+        "skill-development"
+      ],
+      "9": [
+        "skill-design",
+        "skill-communication"
+      ]
     },
-    "createdAt": "2025-05-08T11:15:00.000Z",
+    "createdAt": "2025-05-09T13:24:41.174Z",
     "index": 9
   },
   {
@@ -199,12 +252,28 @@
       "1": "role-engineer",
       "2": "exp-10plus",
       "3": "no",
-      "4": ["goal-project", "goal-partners"],
-      "5": ["type-senior", "type-engineer"],
-      "6": ["industry-construction", "industry-energy"],
-      "7": ["industry-construction"],
-      "8": ["skill-project", "skill-leadership"],
-      "9": ["skill-development"]
+      "4": [
+        "goal-project",
+        "goal-partners"
+      ],
+      "5": [
+        "type-senior",
+        "type-engineer"
+      ],
+      "6": [
+        "industry-construction",
+        "industry-energy"
+      ],
+      "7": [
+        "industry-construction"
+      ],
+      "8": [
+        "skill-project",
+        "skill-leadership"
+      ],
+      "9": [
+        "skill-development"
+      ]
     },
     "createdAt": "2025-05-08T12:30:00.000Z",
     "index": 10
@@ -217,12 +286,29 @@
       "1": "role-entrepreneur",
       "2": "exp-3-5",
       "3": "yes",
-      "4": ["goal-customers", "goal-contacts"],
-      "5": ["type-recruiter", "type-none"],
-      "6": ["industry-creative", "industry-trade"],
-      "7": ["industry-creative"],
-      "8": ["skill-copywriting", "skill-marketing", "skill-sales"],
-      "9": ["skill-marketing"]
+      "4": [
+        "goal-customers",
+        "goal-contacts"
+      ],
+      "5": [
+        "type-recruiter",
+        "type-none"
+      ],
+      "6": [
+        "industry-creative",
+        "industry-trade"
+      ],
+      "7": [
+        "industry-creative"
+      ],
+      "8": [
+        "skill-copywriting",
+        "skill-marketing",
+        "skill-sales"
+      ],
+      "9": [
+        "skill-marketing"
+      ]
     },
     "createdAt": "2025-05-08T13:45:00.000Z",
     "index": 11
@@ -235,10 +321,18 @@
       "1": "role-admin",
       "2": "exp-0-1",
       "3": "no",
-      "4": ["goal-none"],
-      "5": ["type-none"],
-      "6": ["industry-unemployed"],
-      "7": ["industry-unemployed"],
+      "4": [
+        "goal-none"
+      ],
+      "5": [
+        "type-none"
+      ],
+      "6": [
+        "industry-unemployed"
+      ],
+      "7": [
+        "industry-unemployed"
+      ],
       "8": [],
       "9": []
     },
@@ -253,12 +347,31 @@
       "1": "role-student",
       "2": "exp-1-3",
       "3": "yes",
-      "4": ["goal-inspiration", "goal-project"],
-      "5": ["type-senior", "type-graduate"],
-      "6": ["industry-education", "industry-hr"],
-      "7": ["industry-education", "industry-health"],
-      "8": ["skill-research", "skill-communication", "skill-project"],
-      "9": ["skill-communication", "skill-leadership"]
+      "4": [
+        "goal-inspiration",
+        "goal-project"
+      ],
+      "5": [
+        "type-senior",
+        "type-graduate"
+      ],
+      "6": [
+        "industry-education",
+        "industry-hr"
+      ],
+      "7": [
+        "industry-education",
+        "industry-health"
+      ],
+      "8": [
+        "skill-research",
+        "skill-communication",
+        "skill-project"
+      ],
+      "9": [
+        "skill-communication",
+        "skill-leadership"
+      ]
     },
     "createdAt": "2025-05-08T16:00:00.000Z",
     "index": 13
@@ -271,12 +384,30 @@
       "1": "role-projectmanager",
       "2": "exp-5-10",
       "3": "no",
-      "4": ["goal-partners", "goal-contacts"],
-      "5": ["type-similar-role", "type-ceo"],
-      "6": ["industry-transport", "industry-production"],
-      "7": ["industry-transport"],
-      "8": ["skill-leadership", "skill-strategy", "skill-development"],
-      "9": ["skill-project", "skill-analysis"]
+      "4": [
+        "goal-partners",
+        "goal-contacts"
+      ],
+      "5": [
+        "type-similar-role",
+        "type-ceo"
+      ],
+      "6": [
+        "industry-transport",
+        "industry-production"
+      ],
+      "7": [
+        "industry-transport"
+      ],
+      "8": [
+        "skill-leadership",
+        "skill-strategy",
+        "skill-development"
+      ],
+      "9": [
+        "skill-project",
+        "skill-analysis"
+      ]
     },
     "createdAt": "2025-05-08T17:25:00.000Z",
     "index": 14
@@ -289,12 +420,31 @@
       "1": "role-entrepreneur",
       "2": "exp-3-5",
       "3": "yes",
-      "4": ["goal-job", "goal-customers", "goal-inspiration"],
-      "5": ["type-student", "type-entrepreneur"],
-      "6": ["industry-startups", "industry-creative"],
-      "7": ["industry-startups"],
-      "8": ["skill-marketing", "skill-copywriting", "skill-strategy"],
-      "9": ["skill-marketing", "skill-project"]
+      "4": [
+        "goal-job",
+        "goal-customers",
+        "goal-inspiration"
+      ],
+      "5": [
+        "type-student",
+        "type-entrepreneur"
+      ],
+      "6": [
+        "industry-startups",
+        "industry-creative"
+      ],
+      "7": [
+        "industry-startups"
+      ],
+      "8": [
+        "skill-marketing",
+        "skill-copywriting",
+        "skill-strategy"
+      ],
+      "9": [
+        "skill-marketing",
+        "skill-project"
+      ]
     },
     "createdAt": "2025-05-08T18:40:00.000Z",
     "index": 15
@@ -307,12 +457,27 @@
       "1": "role-economist",
       "2": "exp-10plus",
       "3": "no",
-      "4": ["goal-project"],
-      "5": ["type-recruiter", "type-similar-role"],
-      "6": ["industry-public", "industry-finance"],
-      "7": ["industry-public"],
-      "8": ["skill-finance", "skill-strategy"],
-      "9": ["skill-finance"]
+      "4": [
+        "goal-project"
+      ],
+      "5": [
+        "type-recruiter",
+        "type-similar-role"
+      ],
+      "6": [
+        "industry-public",
+        "industry-finance"
+      ],
+      "7": [
+        "industry-public"
+      ],
+      "8": [
+        "skill-finance",
+        "skill-strategy"
+      ],
+      "9": [
+        "skill-finance"
+      ]
     },
     "createdAt": "2025-05-08T19:50:00.000Z",
     "index": 16
@@ -325,12 +490,29 @@
       "1": "role-consultant",
       "2": "exp-3-5",
       "3": "yes",
-      "4": ["goal-job", "goal-inspiration"],
-      "5": ["type-senior", "type-none"],
-      "6": ["industry-energy", "industry-construction"],
-      "7": ["industry-energy"],
-      "8": ["skill-analysis", "skill-communication"],
-      "9": ["skill-research", "skill-development"]
+      "4": [
+        "goal-job",
+        "goal-inspiration"
+      ],
+      "5": [
+        "type-senior",
+        "type-none"
+      ],
+      "6": [
+        "industry-energy",
+        "industry-construction"
+      ],
+      "7": [
+        "industry-energy"
+      ],
+      "8": [
+        "skill-analysis",
+        "skill-communication"
+      ],
+      "9": [
+        "skill-research",
+        "skill-development"
+      ]
     },
     "createdAt": "2025-05-08T20:20:00.000Z",
     "index": 17
@@ -343,12 +525,30 @@
       "1": "role-sales",
       "2": "exp-1-3",
       "3": "no",
-      "4": ["goal-contacts", "goal-customers"],
-      "5": ["type-student", "type-analyst"],
-      "6": ["industry-tourism", "industry-trade"],
-      "7": ["industry-tourism"],
-      "8": ["skill-sales", "skill-communication", "skill-marketing"],
-      "9": ["skill-sales", "skill-copywriting"]
+      "4": [
+        "goal-contacts",
+        "goal-customers"
+      ],
+      "5": [
+        "type-student",
+        "type-analyst"
+      ],
+      "6": [
+        "industry-tourism",
+        "industry-trade"
+      ],
+      "7": [
+        "industry-tourism"
+      ],
+      "8": [
+        "skill-sales",
+        "skill-communication",
+        "skill-marketing"
+      ],
+      "9": [
+        "skill-sales",
+        "skill-copywriting"
+      ]
     },
     "createdAt": "2025-05-08T21:00:00.000Z",
     "index": 18

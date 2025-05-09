@@ -22,7 +22,7 @@ function Home() {
 
         {view === VIEW_START && (
           <>
-            <Header title={t("before-event")} />
+            <Header title={t("before-event")} onBack={() => setView(VIEW_USER)} />
             <StartPage goTo={setView} />
           </>
         )}
@@ -30,14 +30,14 @@ function Home() {
 
         {view === VIEW_USER && (
           <>
-            <Header title={t("personal-info")} onBack={() => setView(VIEW_START)} />
+            <Header title={t("personal-info")}/>
             <User goTo={setView} setEmail={setEmail} />
           </>
         )}
 
         {view === VIEW_QUESTIONS && (
           <>
-            <Header title={t("question-about-you")} onBack={() => setView(VIEW_RESULTS)} />
+            <Header title={t("question-about-you")} onBack={() => setView(VIEW_START)} />
             <Questions goTo={setView} email={email} />
           </>
         )}
@@ -141,7 +141,7 @@ function User({ goTo, setEmail }) {
 
             console.log("Användaren har inte svarat på frågorna. Skickar till frågorna.");
             setEmail(localEmail); // Spara mejladressen
-            goTo(VIEW_QUESTIONS); // Skicka användaren till frågorna
+            goTo(VIEW_START); // Skicka användaren till frågorna
         } catch (error) {
             console.error('Kunde inte verifiera användarens e-postadress:', error);
             setErrorMessage(t("error-message"));
