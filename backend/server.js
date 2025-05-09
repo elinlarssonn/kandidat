@@ -296,6 +296,40 @@ app.get('/match-all', (req, res) => {
         console.log(`Topp 3 matchningsresultat för userId ${userId}:`, topMatches); // Logga topp 3 matchningsresultaten med userId
     });
 });
+app.get('/match-rest', (req, res) => {
+    const userId = req.query.userId;
+    if (!userId) return res.status(400).send('UserId krävs.');
+  
+    fs.readFile(DATA_FILE, 'utf8', (err, data) => {
+      if (err) return res.status(500).send('Kunde inte läsa svaren.');
+  
+      const answers = JSON.parse(data || '[]');
+      const requestingUser = answers.find(person => person.userId === userId);
+      if (!requestingUser) return res.status(404).send('Användaren hittades inte.');
+  
+      const matchResults = answers
+        .filter(p => p.userId !== userId)
+        .map(personB => ({
+          userA: {
+            userId: requestingUser.userId,
+            firstName: requestingUser.firstName || "Okänd",
+            lastName: requestingUser.lastName || "Okänd"
+          },
+          userB: {
+            userId: personB.userId,
+            firstName: personB.firstName || "Okänd",
+            lastName: personB.lastName || "Okänd"
+          },
+          matchScore: calculateMatchScore(requestingUser, personB)
+        }))
+        .sort((a, b) => b.matchScore - a.matchScore);
+  
+      res.json(matchResults.slice(3, 8));
+
+      const moreMatches = moreMatches.slice(4, 8);
+      res.json(moreMatches);
+    });
+  });
 
 // Endpoint för att dynamiskt uppdatera matchningar för alla personer
 app.get('/match-all-dynamic', (req, res) => {
@@ -329,14 +363,6 @@ app.get('/match-all-dynamic', (req, res) => {
                 });
             }
         }
-
-        // Sortera matchningsresultaten efter poäng i fallande ordning
-        matchResults.sort((a, b) => b.matchScore - a.matchScore);
-
-        // Returnera de tre högsta matchningarna
-        const topMatches = matchResults.slice(0, 3);
-        res.json(topMatches);
-        console.log(`Topp 3 dynamiska matchningsresultat för userId ${userId}:`, topMatches); // Logga topp 3 dynamiska matchningsresultaten med userId
     });
 });
 

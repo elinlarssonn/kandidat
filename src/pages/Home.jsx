@@ -44,7 +44,7 @@ function Home() {
 
         {view === VIEW_RESULTS && (
           <>
-            <Header title={t("user-matches")} onBack={() => setView(VIEW_QUESTIONS)} />
+            <Header title={t("users-matches")} onBack={() => setView(VIEW_QUESTIONS)} />
             <MatchResults goTo={setView} userId={email} refresh={() => setView(VIEW_RESULTS)} />
           </>
         )}

@@ -5,6 +5,7 @@
 "personal-info": "Personuppgifter",
 "question-about-you": "Frågor om dig",
 "users-matches": "Dina matchningar",
+"back":"Tillbaka",
 "answer-text": "Svara gärna på några snabba frågor – det hjälper oss att matcha dig med relevanta kontakter under eventet.",
 "start-button": "Starta",
 "alert-consent": "Du måste godkänna villkoren för att fortsätta. Tryck på det röda krysset om du inte godkänner villkoren.",
@@ -114,7 +115,9 @@
 "name":"Namn",
 "close-button":"Stäng",
 "alert-chat-one":"Chatt med",
-"alert-chat-two":"öppnas (implementera chattfunktion här)."
+"alert-chat-two":"öppnas (implementera chattfunktion här).",
 
+"show-more-matches": "Visa fler matchningar",
+"hide-more-matches": "Göm fler matchningar"
 
 }

@@ -8,6 +8,9 @@ function MatchResults({ goTo, userId }) {
     const [results, setResults] = useState([]);
     const [selectedUser, setSelectedUser] = useState(null); // För att hantera popup för information
     const { t } = useLanguage();
+    const [extraResults, setExtraResults] = useState([]); // För fler matchningar
+    const [showingMore, setShowingMore] = useState(false); // Om fler matchningar visas 
+
     
 
     React.useEffect(() => {
@@ -18,10 +21,28 @@ function MatchResults({ goTo, userId }) {
         // Hämta matchningsresultat från backend med userId
         fetch(`http://localhost:5001/match-all?userId=${encodeURIComponent(userId)}`)
             .then(response => response.json())
-            .then(data => setResults(data))
+            .then(data => {
+                setResults(data);
+                setShowingMore(false); // Återställ när man uppdaterar
+                setExtraResults([]);
+            })
             .catch(error => console.error('Fel vid hämtning av matchningsresultat:', error));
     };
-
+    const fetchMoreResults = () => {
+        fetch(`http://localhost:5001/match-rest?userId=${encodeURIComponent(userId)}`)
+            .then(response => response.json())
+            .then(data => {
+                setExtraResults(data);
+                setShowingMore(true);
+            })
+            .catch(error => console.error('Fel vid hämtning av extra matchningar:', error));
+    };
+    const toggleShowMore = () => {
+        if (!showingMore && extraResults.length === 0) {
+            fetchMoreResults(); // Endast första gången
+        }
+        setShowingMore(!showingMore);
+    };    
     const openInfoPopup = (user) => {
         console.log(user);
         setSelectedUser({
@@ -60,6 +81,24 @@ function MatchResults({ goTo, userId }) {
                     </li>
                 ))}
             </ul>
+            {/* Visa/Göm fler */}
+            {results.length > 0 && (
+                <button className="load-more-button" onClick={toggleShowMore}>
+                    {showingMore ? t("hide-more-matches") : t("show-more-matches")}
+                </button>
+            )}
+            {showingMore && extraResults.length > 0 && (
+                <ul>
+                    {extraResults.map((result, index) => (
+                    <li key={`extra-${index}`} className="match-item">
+                        {t("your-matches")}{result.userB.firstName} {result.userB.lastName} {t("with")} {result.matchScore} {t("points")}
+                        <button className="info-button" onClick={() => openInfoPopup(result.userB)}>ℹ️</button>
+                        <button className="chat-button" onClick={() => openChat(result.userB.userId)}>💬</button>
+                    </li>
+                ))}
+                </ul>
+            )}
+
             <Button label="Uppdatera matchningar" onClick={fetchResults} />
 
             {/* Popup för information */}

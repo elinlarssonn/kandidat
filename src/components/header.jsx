@@ -8,7 +8,7 @@ function Header({ title, onBack }) {
     <div className="page-header">
       {onBack && (
         <button className="header-back-button" onClick={onBack}>
-        ← Tillbaka
+        ← {t("back")}
         </button>
       )}
       <h2 className="header-title">{title}</h2>

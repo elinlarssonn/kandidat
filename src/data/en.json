@@ -5,6 +5,7 @@
     "personal-info": "Personal information",
     "question-about-you": "Question about you",
     "users-matches": "Your matches",
+    "back":"Back",
     "answer-text": "Please answer a few quick questions – this will help us match you with relevant contacts during the event.",
     "start-button": "Start",
     "alert-consent": "You must agree to the terms and conditions to continue. Press the red cross if you do not agree to the terms and conditions.",
@@ -114,6 +115,9 @@
 "name":"Name",
 "close-button":"Close",
 "alert-chat-one":"Chat with",
-"alert-chat-two":"is opening (implement chatfunction here)."
+"alert-chat-two":"is opening (implement chatfunction here).",
+
+"show-more-matches": "Show more matches",
+"hide-more-matches": "Hide additional matches"
 
 }
