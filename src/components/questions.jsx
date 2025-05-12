@@ -57,7 +57,7 @@ function Questions({ goTo, email }) {
   };
 
   const nextQuestion = () => {
-    if (currentQuestionIndex < remainingQuestions.length - 1) {
+    if (currentQuestionIndex <= remainingQuestions.length - 1) {
       setCurrentQuestionIndex(prev => prev + 1);
     } else {
       submitAnswers();
@@ -213,7 +213,7 @@ function Questions({ goTo, email }) {
 </div>
           </div>
           <Button
-            label={currentQuestionIndex < remainingQuestions.length - 1 ? t("next-question") : t("submit")}
+            label={currentQuestionIndex <= remainingQuestions.length - 1 ? t("next-question") : t("submit")}
             onClick={nextQuestion}
           />
         </div>

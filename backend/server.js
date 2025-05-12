@@ -204,9 +204,17 @@ function calculateMatchScore(personA, personB) {
     // Gemensamma kompetenser (fråga 8)
     const skillsA = personA.answers[8] || [];
     const skillsB = personB.answers[8] || [];
+    const complementarySkillsA = personA.answers[9] || [];
+    const complementarySkillsB = personB.answers[9] || [];
     const sharedSkills = skillsA.filter(skill => skillsB.includes(skill));
     score += sharedSkills.length * 1;
     console.log('Total poäng gemensamma kompetenser:', score); // Logga poängen
+    const overlapingSkills = complementarySkillsA.filter(skill => skillsB.includes(skill)) ||
+                            complementarySkillsB.filter(skill => skillsA.includes(skill));
+    if (overlapingSkills) {
+    score += overlapingSkills.length; //Ger ett pong för varje lika
+    console.log('Total poäng efter att ha kollar overlapingSkills:', score); //Logga poäng
+    }
 
     // FRÅGA 1 & 5 - Liknande yrkesroll och specifika målgrupper
     const roleA = personA.answers[1];
