@@ -108,6 +108,12 @@
 
 "question-interest-areas": "Vilka områden intresserar dig mest just nu? Välj max 3 alternativ",
 
+"read-more-gdpr": "Innan du skickar in kan du läsa mer om hur vi hanterar dina uppgifter.",
+"read-more-here": "Läs mer här",
+"gdpr-title": "GDPR och dataskydd",
+"gdpr-info": "Dina svar används endast för att matcha dig med relevanta personer under evenemanget. All data anonymiseras och raderas efter evenemangets slut.",
+"back-button": "Tillbaka",
+
 "match-result":"Matchningsresultat för",
 "your-matches":"Du har matchat med ",
 "with":"med",
@@ -118,7 +124,13 @@
 "alert-chat-one":"Chatt med",
 "alert-chat-two":"öppnas (implementera chattfunktion här).",
 
+"no-matches-message": "Du har tyvärr inga matchningar just nu. Kika in senare när fler deltagare har svarat!",
 "show-more-matches": "Visa fler matchningar",
-"hide-more-matches": "Göm fler matchningar"
+"hide-more-matches": "Göm fler matchningar",
+"more-strong-matches": "Andra starka matchningar",
+"weaker-matches": "Svagare matchningar",
+"weak-matches": "Svaga matchningar",
+"weak-matches-button": "Visa svaga matchningar",
+"hide-weak-matches": "Göm svaga matchningar"
 
 }

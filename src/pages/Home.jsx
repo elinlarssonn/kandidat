@@ -5,12 +5,11 @@ import MatchResults from '../components/match'; // Importera MatchResults
 import Header from '../components/header'; 
 import { useLanguage } from '../LanguageContext';
 
-
-const VIEW_START = 2;
-//const VIEW_CONSENT = 2;
 const VIEW_USER = 1;
+const VIEW_START = 2;
 const VIEW_QUESTIONS = 3;
-const VIEW_RESULTS = 4; // Ny vy för matchningsresultat
+const VIEW_RESULTS = 4; 
+const VIEW_CONSENT = 5;
 
 function Home() {
     const { t } = useLanguage();
@@ -49,6 +48,13 @@ function Home() {
           </>
         )}
 
+        {view === VIEW_CONSENT && (
+          <>
+            <Header title={t("gdpr-title")} onBack={() => setView(VIEW_QUESTIONS)} />
+            <Consent goTo={setView} />
+          </>
+        )}
+
       </div>
     );
   }
@@ -74,7 +80,7 @@ function Consent({ goTo }) {
 
   const handleClick = () => {
     if (approved) {
-      goTo(VIEW_USER);
+      goTo(VIEW_RESULTS);
     } else {
       alert(t("alert-consent"));;
     }
@@ -98,7 +104,6 @@ function Consent({ goTo }) {
         </div>
 
         <button onClick={handleClick}>{t("start-button")}</button>
-        <button className="close-button" onClick={() => goTo(VIEW_START)}>✖️</button>
       </div>
     </div>
   );

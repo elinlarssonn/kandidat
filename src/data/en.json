@@ -108,6 +108,12 @@
 
 "question-interest-areas": "What areas are you most interested in right now? Choose up to 3 options",
 
+"read-more-gdpr": "Before you submit, you can read more about how we handle your data.",
+"read-more-here": "Read more here",
+"gdpr-title": "GDPR and data protection",
+"gdpr-info": "Your responses will only be used to match you with relevant people during the event. All data will be anonymized and deleted after the event ends.",
+"back-button": "Back",
+
 "match-result":"Match result for",
 "your-matches":"You have matched with",
 "with":"with",
@@ -118,7 +124,13 @@
 "alert-chat-one":"Chat with",
 "alert-chat-two":"is opening (implement chatfunction here).",
 
+"no-matches-message": "Sorry, you have no matches right now. Check back later when more participants have responded!",
 "show-more-matches": "Show more matches",
-"hide-more-matches": "Hide additional matches"
+"hide-more-matches": "Hide additional matches",
+"more-strong-matches": "More strong matches",
+"weaker-matches": "Weaker matches",
+"weak-matches": "Weak matches",
+"weak-matches-button": "Show weak matches",
+"hide-weak-matches": "Hide weak matches"
 
 }

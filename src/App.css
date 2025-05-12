@@ -143,6 +143,20 @@ button:hover {
   position: fixed;
 }
 
+.consent-link-text {
+  font-size: 12px;  /* Justera som du vill, t.ex. 16px eller 0.9rem */
+  margin-top: 20px;
+  color: white; /* Om bakgrunden är mörk, ändra vid behov */
+  text-align: center;
+}
+
+.consent-link {
+  font-size: 12px;
+  text-decoration: underline;
+  color: blue;
+  cursor: pointer;
+}
+
 .checkbox-container {
   display: flex;
   align-items: center;
@@ -338,10 +352,19 @@ button:hover {
 }
 
 .match-item {
-  display: flex;
   align-items: center;
-  justify-content: space-between;
-  margin-bottom: 10px;
+  justify-content: center;
+  display: flex;
+  margin-bottom: 10px; 
+  padding: 5px;
+  font-size: 22px;
+  max-width: 700px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.match-item > span {
+  margin-right: 15px; /* Mellanrum mellan texten och första knappen */
 }
 
 .info-button, .chat-button {
@@ -354,21 +377,51 @@ button:hover {
   display: flex;
   align-items: center;
   justify-content: center;
+  background: none;
 }
 
-.info-button {
-  background-color: #007bff;
+.icon-image {
+    width: 24px;
+    height: 24px;
+    object-fit: contain;
+}
+
+.icon-image:hover {
+  transform: scale(1.20);
+}
+
+.match-results {
+  padding-top: 100px;
+  padding-bottom: 40px;
+}
+
+.no-matches-message {
   color: white;
-  margin-right: 10px; /* Mellanrum mellan första och andra knappen */
+  font-size: 1.2rem;
+  margin-bottom: 20px;
+  text-align: center;
 }
 
-.chat-button {
-  background-color: #28a745;
-  color: white;
+.button-in-matching {
+  display: flex;
+  gap: 20px;
+  justify-content: center;
+  margin-top: 30px;
+  flex-wrap: wrap;
 }
 
-.match-item > span {
-  margin-right: 15px; /* Mellanrum mellan texten och första knappen */
+.load-more-button {
+  background-color: white;
+  color: #4CAF50;
+  border: none;
+  padding: 12px 20px;
+  border-radius: 20px;
+  font-size: 1rem;
+  cursor: pointer;
+}
+
+.load-more-button:hover {
+  background-color: #e0f2e9;
 }
 
 .info-popup {

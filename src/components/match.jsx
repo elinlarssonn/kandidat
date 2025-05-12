@@ -10,6 +10,9 @@ function MatchResults({ goTo, userId }) {
     const { t } = useLanguage();
     const [extraResults, setExtraResults] = useState([]); // För fler matchningar
     const [showingMore, setShowingMore] = useState(false); // Om fler matchningar visas 
+    const [showWeak, setShowWeak] = useState(false);
+    const [noMatches, setNoMatches] = useState(false);
+
 
     
 
@@ -22,9 +25,13 @@ function MatchResults({ goTo, userId }) {
         fetch(`http://localhost:5001/match-all?userId=${encodeURIComponent(userId)}`)
             .then(response => response.json())
             .then(data => {
-                setResults(data);
+                const nonZeroMatches = data.filter(match => match.matchScore > 0);
+                setResults(nonZeroMatches);
                 setShowingMore(false); // Återställ när man uppdaterar
                 setExtraResults([]);
+
+                const allScoresAreZero = nonZeroMatches.length === 0;
+                setNoMatches(allScoresAreZero);
             })
             .catch(error => console.error('Fel vid hämtning av matchningsresultat:', error));
     };
@@ -37,12 +44,18 @@ function MatchResults({ goTo, userId }) {
             })
             .catch(error => console.error('Fel vid hämtning av extra matchningar:', error));
     };
+
     const toggleShowMore = () => {
         if (!showingMore && extraResults.length === 0) {
             fetchMoreResults(); // Endast första gången
         }
         setShowingMore(!showingMore);
     };    
+
+    const toggleShowWeak = () => {
+        setShowWeak(!showWeak);
+    };
+
     const openInfoPopup = (user) => {
         console.log(user);
         setSelectedUser({
@@ -68,36 +81,110 @@ function MatchResults({ goTo, userId }) {
     return (
         <div className="match-results">
             <h1>{t("match-result")} {userName}</h1>
+            
+            {noMatches && (
+                <p className="no-matches-message">
+                    {t("no-matches-message")}
+                </p>
+            )}
+            
+            {results.length > 0 && (
             <ul>
                 {results.map((result, index) => (
                     <li key={index} className="match-item">
-                        {t("your-matches")}{result.userB.firstName} {result.userB.lastName} {t("with")} {result.matchScore} {t("points")}
+                        <span>
+                            {t("your-matches")}{result.userB.firstName} {result.userB.lastName} {t("with")} {result.matchScore} {t("points")}
+                        </span>
                         <button className="info-button" onClick={() => openInfoPopup(result.userB)}>
-                            ℹ️
+                            <img src= '/icons/info-svgrepo-com.svg' alt="Info" className="icon-image" />
                         </button>
                         <button className="chat-button" onClick={() => openChat(result.userB.userId)}>
-                            💬
+                            <img src="/icons/chat-round-dots-svgrepo-com.svg" alt="Chat" className="icon-image" />
                         </button>
                     </li>
                 ))}
             </ul>
+            )}
             {/* Visa/Göm fler */}
             {results.length > 0 && (
-                <button className="load-more-button" onClick={toggleShowMore}>
-                    {showingMore ? t("hide-more-matches") : t("show-more-matches")}
-                </button>
+                <div className="button-in-matching">
+                    <button className="load-more-button" onClick={toggleShowMore}>
+                        {showingMore ? t("hide-more-matches") : t("show-more-matches")}
+                    </button>
+                </div>
             )}
-            {showingMore && extraResults.length > 0 && (
-                <ul>
-                    {extraResults.map((result, index) => (
-                    <li key={`extra-${index}`} className="match-item">
-                        {t("your-matches")}{result.userB.firstName} {result.userB.lastName} {t("with")} {result.matchScore} {t("points")}
-                        <button className="info-button" onClick={() => openInfoPopup(result.userB)}>ℹ️</button>
-                        <button className="chat-button" onClick={() => openChat(result.userB.userId)}>💬</button>
-                    </li>
-                ))}
-                </ul>
-            )}
+            {showingMore && (
+                <>
+                {/* Starka matchningar */}
+                {extraResults.strongMatches?.length > 0 && (
+                    <>
+                    <h2>{t("more-strong-matches")}</h2>
+                        <ul>
+                            {extraResults.strongMatches.map((result, index) => (
+                                <li key={`strong-${index}`} className="match-item">
+                                    {t("your-matches")}{result.userB.firstName} {result.userB.lastName} {t("with")} {result.matchScore} {t("points")}
+                                    <button className="info-button" onClick={() => openInfoPopup(result.userB)}>
+                                        <img src="/icons/info-svgrepo-com.svg" alt="Info" className="icon-image" />
+                                    </button>
+                                    <button className="chat-button" onClick={() => openChat(result.userB.userId)}>
+                                        <img src="/icons/chat-round-dots-svgrepo-com.svg" alt="Chat" className="icon-image" />
+                                    </button>
+                                </li>
+                            ))}
+                        </ul>
+                    </>
+                )}
+                
+                {/* Medelmatchningar */}
+                {extraResults.mediumMatches?.length > 0 && (
+                    <>
+                    <h2>{t("weaker-matches")}</h2>
+                        <ul>
+                            {extraResults.mediumMatches.map((result, index) => (
+                                <li key={`medium-${index}`} className="match-item">
+                                    {t("your-matches")}{result.userB.firstName} {result.userB.lastName} {t("with")} {result.matchScore} {t("points")}
+                                    <button className="info-button" onClick={() => openInfoPopup(result.userB)}>
+                                        <img src="/icons/info-svgrepo-com.svg" alt="Info" className="icon-image" />
+                                    </button>
+                                    <button className="chat-button" onClick={() => openChat(result.userB.userId)}>
+                                        <img src="/icons/chat-round-dots-svgrepo-com.svg" alt="Chat" className="icon-image" />
+                                    </button>
+                                </li>
+                            ))}
+                        </ul>
+                    </>
+                )}
+
+                {/* Visa/Göm fler */}
+                {results.length > 0 && (
+                    <div className="more-button-in-matching">
+                        <button className="load-more-button" onClick={toggleShowWeak}>
+                            {showWeak ? t("hide-weak-matches") : t("weak-matches-button")}
+                        </button>
+                    </div>
+                )}
+    
+                {/* Svaga matchningar */}
+                {showWeak && extraResults.weakMatches?.length > 0 && (
+                    <>
+                    <h2>{t("weak-matches")}</h2>
+                        <ul>
+                            {extraResults.weakMatches.map((result, index) => (
+                                <li key={`weak-${index}`} className="match-item">
+                                    {t("your-matches")}{result.userB.firstName} {result.userB.lastName} {t("with")} {result.matchScore} {t("points")}
+                                    <button className="info-button" onClick={() => openInfoPopup(result.userB)}>
+                                        <img src="/icons/info-svgrepo-com.svg" alt="Info" className="icon-image" />
+                                    </button>
+                                    <button className="chat-button" onClick={() => openChat(result.userB.userId)}>
+                                        <img src="/icons/chat-round-dots-svgrepo-com.svg" alt="Chat" className="icon-image" />
+                                    </button>
+                                </li>
+                            ))}
+                        </ul>
+                    </>
+                )}
+            </>
+            )} 
 
             <Button label="Uppdatera matchningar" onClick={fetchResults} />
 

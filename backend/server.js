@@ -331,11 +331,20 @@ app.get('/match-rest', (req, res) => {
           matchScore: calculateMatchScore(requestingUser, personB)
         }))
         .sort((a, b) => b.matchScore - a.matchScore);
-  
-      res.json(matchResults.slice(3, 8));
+        
+        const top3 = matchResults.slice(0, 3); // Dessa visas redan
+        const rest = matchResults.slice(3);
 
-      const moreMatches = moreMatches.slice(4, 8);
-      res.json(moreMatches);
+        // Gruppera enligt poäng
+        const strongMatches = rest.filter(m => m.matchScore > 10);
+        const mediumMatches = rest.filter(m => m.matchScore > 5 && m.matchScore <= 10);
+        const weakMatches = rest.filter(m => m.matchScore >= 1 && m.matchScore <= 5);
+      
+        res.json({
+            strongMatches,
+            mediumMatches,
+            weakMatches
+        });
     });
   });
 

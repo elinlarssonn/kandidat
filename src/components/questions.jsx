@@ -210,8 +210,22 @@ function Questions({ goTo, email }) {
         <label htmlFor={`${currentQuestion.id}-${option}`}>{t(option)}</label>
       </div>
     ))}
+  </div>
 </div>
-          </div>
+
+  {}
+    {currentQuestionIndex === remainingQuestions.length && (
+      <p className="consent-link-text">
+        {t("read-more-gdpr")}{" "}
+        <span
+          className="consent-link"
+          onClick={() => goTo(5)}
+        >
+        {t("read-more-here")}
+        </span>
+      </p>
+    )}
+
           <Button
             label={currentQuestionIndex <= remainingQuestions.length - 1 ? t("next-question") : t("submit")}
             onClick={nextQuestion}
