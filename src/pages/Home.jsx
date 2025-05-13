@@ -76,34 +76,24 @@ function StartPage({ goTo }) {
 
 function Consent({ goTo }) {
   const { t } = useLanguage();
-  const [approved, setApproved] = useState(false);
-
-  const handleClick = () => {
-    if (approved) {
-      goTo(VIEW_RESULTS);
-    } else {
-      alert(t("alert-consent"));;
-    }
-  };
 
   return (
     <div className="consent-overlay">
-
       <div className="consent-box">
         <p>
-        {t("consent-info")}
+          {t("consent-info").split('\n').map((line, index) => (
+            <React.Fragment key={index}>
+              {line}<br />
+            </React.Fragment>
+          ))}
         </p>
-
-        <div className="checkbox-container">
-          <input
-            type="checkbox"
-            checked={approved}
-            onChange={(e) => setApproved(e.target.checked)}
-          />
-          <label>{t("approve-consent")}</label>
-        </div>
-
-        <button onClick={handleClick}>{t("start-button")}</button>
+        <Button
+          label={t("back-button")}
+          onClick={() => {
+            sessionStorage.setItem('returnToQuestionIndex', '6'); // fråga 7 = index 6
+            goTo(3); // gå till Questions
+          }}
+        />
       </div>
     </div>
   );
@@ -156,7 +146,7 @@ function User({ goTo, setEmail }) {
     return (
         <div className="user-info-form">
             <div>
-                <label>{t("email")}</label>
+                <h1>{t("email-info")}</h1>
                 <input
                     type="email"
                     value={localEmail}

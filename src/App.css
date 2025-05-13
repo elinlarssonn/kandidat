@@ -114,6 +114,15 @@ button:hover {
   background-color: #1b7749;
 }
 
+button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  pointer-events: none;
+  background-color: #cccccc;
+  color: #666666;
+  border: 1px solid #999999;
+}
+
 
 .start-content {
   padding-top: 80px;
@@ -206,6 +215,7 @@ button:hover {
 .user-info-form input {
   width: 300px; 
   padding: 10px 14px;
+  margin-top: 20px;
   font-size: 14px;
   border-radius: 4px;
   border: 1px solid #077006;

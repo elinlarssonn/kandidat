@@ -171,7 +171,7 @@
         "skill-programming"
       ]
     },
-    "createdAt": "2025-05-07T13:04:25.470Z",
+    "createdAt": "2025-05-13T09:34:48.368Z",
     "index": 7
   },
   {
@@ -550,7 +550,7 @@
         "skill-copywriting"
       ]
     },
-    "createdAt": "2025-05-08T21:00:00.000Z",
+    "createdAt": "2025-05-13T11:27:26.898Z",
     "index": 18
   },
   {
@@ -585,7 +585,7 @@
         "skill-design"
       ]
     },
-    "createdAt": "2025-05-12T07:52:49.855Z",
+    "createdAt": "2025-05-13T10:03:21.933Z",
     "index": 18
   },
   {
@@ -618,16 +618,67 @@
     "userId": "anna4@gmail.com",
     "firstName": "Anna",
     "lastName": "4",
-    "answers": {},
-    "createdAt": "",
+    "answers": {
+      "1": "role-entrepreneur",
+      "2": "exp-3-5",
+      "3": "no",
+      "4": [
+        "goal-partners",
+        "goal-project",
+        "goal-contacts"
+      ],
+      "5": [
+        "type-similar-role",
+        "type-entrepreneur"
+      ],
+      "6": [
+        "industry-startups"
+      ],
+      "7": [
+        "industry-startups",
+        "industry-tech",
+        "industry-finance"
+      ],
+      "8": [
+        "skill-project",
+        "skill-leadership",
+        "skill-analysis"
+      ]
+    },
+    "createdAt": "2025-05-13T11:37:40.034Z",
     "index": 18
   },
   {
     "userId": "anna5@gmail.com",
     "firstName": "Anna",
     "lastName": "5",
-    "answers": {},
-    "createdAt": "",
+    "answers": {
+      "1": "role-recruiter",
+      "2": "exp-1-3",
+      "4": [
+        "goal-recruit"
+      ],
+      "5": [
+        "type-graduate",
+        "type-student"
+      ],
+      "6": [
+        "industry-tech"
+      ],
+      "7": [
+        "industry-education",
+        "industry-tech",
+        "industry-finance"
+      ],
+      "8": [
+        "skill-development"
+      ],
+      "9": [
+        "skill-research",
+        "skill-strategy"
+      ]
+    },
+    "createdAt": "2025-05-13T13:09:05.402Z",
     "index": 18
   },
   {
@@ -668,6 +719,58 @@
     "lastName": "10",
     "answers": {},
     "createdAt": "",
+    "index": 18
+  },
+  {
+    "userId": "emma@lindskog.se",
+    "firstName": "Emma",
+    "lastName": "GL",
+    "answers": {
+      "1": "role-ceo",
+      "2": "exp-0-1",
+      "4": [
+        "goal-customers",
+        "goal-inspiration",
+        "goal-contacts"
+      ],
+      "5": [
+        "type-similar-role",
+        "type-graduate"
+      ],
+      "6": [
+        "industry-tourism"
+      ],
+      "7": [
+        "industry-tech",
+        "industry-finance",
+        "industry-startups"
+      ],
+      "8": [
+        "skill-sales",
+        "skill-leadership",
+        "skill-project"
+      ],
+      "9": [
+        "skill-sales",
+        "skill-project",
+        "skill-leadership"
+      ]
+    },
+    "createdAt": "2025-05-13T13:11:52.836Z",
+    "index": 18
+  },
+  {
+    "userId": "tea.stjarne@gmail.com",
+    "firstName": "Tea",
+    "lastName": "Stjärne",
+    "answers": {
+      "9": [
+        "skill-design",
+        "skill-communication",
+        "skill-programming"
+      ]
+    },
+    "createdAt": "2025-05-13T13:15:48.388Z",
     "index": 18
   }
 ]

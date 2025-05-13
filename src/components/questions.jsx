@@ -11,10 +11,19 @@ function Questions({ goTo, email }) {
 
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [answers, setAnswers] = useState({});
+  const [consentApproved, setConsentApproved] = useState(false);
   const translations = {
     sv: sv,
     en: en
   };
+
+  React.useEffect(() => {
+    const savedIndex = sessionStorage.getItem('returnToQuestionIndex');
+    if (savedIndex) {
+      setCurrentQuestionIndex(parseInt(savedIndex, 10));
+      sessionStorage.removeItem('returnToQuestionIndex'); // Rensa efter användning
+    }
+  }, []);
 
   const handleAnswer = (questionId, option) => {
     setAnswers(prev => {
@@ -213,22 +222,33 @@ function Questions({ goTo, email }) {
   </div>
 </div>
 
-  {}
-    {currentQuestionIndex === remainingQuestions.length && (
+  {currentQuestionIndex === remainingQuestions.length && (
+    <div className="consent-section">
       <p className="consent-link-text">
         {t("read-more-gdpr")}{" "}
         <span
           className="consent-link"
           onClick={() => goTo(5)}
         >
-        {t("read-more-here")}
+          {t("read-more-here")}
         </span>
       </p>
-    )}
+      <div className="checkbox-container">
+        <input
+          type="checkbox"
+          id="consent-approved"
+          checked={consentApproved}
+          onChange={() => setConsentApproved(!consentApproved)}
+        />
+        <label htmlFor="consent-approved">{t("approve-consent")}</label>
+      </div>
+    </div>
+  )}
 
           <Button
             label={currentQuestionIndex <= remainingQuestions.length - 1 ? t("next-question") : t("submit")}
             onClick={nextQuestion}
+            disabled={!consentApproved && currentQuestionIndex === remainingQuestions.length}
           />
         </div>
       )}
