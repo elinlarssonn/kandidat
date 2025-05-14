@@ -80,7 +80,7 @@ function MatchResults({ goTo, userId }) {
 
     return (
         <div className="match-results">
-            <h1>{t("match-result")} {userName}</h1>
+            <h1>{t("match-result")}</h1>
             
             {noMatches && (
                 <p className="no-matches-message">
@@ -89,11 +89,14 @@ function MatchResults({ goTo, userId }) {
             )}
             
             {results.length > 0 && (
-            <ul>
+                <>
+            <h2 className="match-section-title"> {t("top-matches")} </h2>
+            <ul className="match-group top-matches">
                 {results.map((result, index) => (
                     <li key={index} className="match-item">
                         <span>
-                            {t("your-matches")}{result.userB.firstName} {result.userB.lastName} {t("with")} {result.matchScore} {t("points")}
+                            <span className="match-label">★  </span>
+                            {result.userB.firstName} {result.userB.lastName}
                         </span>
                         <button className="info-button" onClick={() => openInfoPopup(result.userB)}>
                             <img src= '/icons/info-svgrepo-com.svg' alt="Info" className="icon-image" />
@@ -104,6 +107,7 @@ function MatchResults({ goTo, userId }) {
                     </li>
                 ))}
             </ul>
+            </>
             )}
             {/* Visa/Göm fler */}
             {results.length > 0 && (
@@ -118,11 +122,13 @@ function MatchResults({ goTo, userId }) {
                 {/* Starka matchningar */}
                 {extraResults.strongMatches?.length > 0 && (
                     <>
-                    <h2>{t("more-strong-matches")}</h2>
-                        <ul>
+                    <h2 className="match-section-title">{t("more-strong-matches")}</h2>
+                        <ul className="match-group strong-matches">
                             {extraResults.strongMatches.map((result, index) => (
                                 <li key={`strong-${index}`} className="match-item">
-                                    {t("your-matches")}{result.userB.firstName} {result.userB.lastName} {t("with")} {result.matchScore} {t("points")}
+                                    <span>
+                                    {result.userB.firstName} {result.userB.lastName} 
+                                    </span>
                                     <button className="info-button" onClick={() => openInfoPopup(result.userB)}>
                                         <img src="/icons/info-svgrepo-com.svg" alt="Info" className="icon-image" />
                                     </button>
@@ -138,11 +144,13 @@ function MatchResults({ goTo, userId }) {
                 {/* Medelmatchningar */}
                 {extraResults.mediumMatches?.length > 0 && (
                     <>
-                    <h2>{t("weaker-matches")}</h2>
-                        <ul>
+                    <h2 className="match-section-title">{t("weaker-matches")}</h2>
+                        <ul className="match-group medium-matches">
                             {extraResults.mediumMatches.map((result, index) => (
                                 <li key={`medium-${index}`} className="match-item">
-                                    {t("your-matches")}{result.userB.firstName} {result.userB.lastName} {t("with")} {result.matchScore} {t("points")}
+                                    <span>
+                                    {result.userB.firstName} {result.userB.lastName}
+                                    </span>
                                     <button className="info-button" onClick={() => openInfoPopup(result.userB)}>
                                         <img src="/icons/info-svgrepo-com.svg" alt="Info" className="icon-image" />
                                     </button>
@@ -167,11 +175,13 @@ function MatchResults({ goTo, userId }) {
                 {/* Svaga matchningar */}
                 {showWeak && extraResults.weakMatches?.length > 0 && (
                     <>
-                    <h2>{t("weak-matches")}</h2>
-                        <ul>
+                    <h2 className="match-section-title">{t("weak-matches")}</h2>
+                        <ul className="match-group weak-matches">
                             {extraResults.weakMatches.map((result, index) => (
                                 <li key={`weak-${index}`} className="match-item">
-                                    {t("your-matches")}{result.userB.firstName} {result.userB.lastName} {t("with")} {result.matchScore} {t("points")}
+                                    <span>
+                                    {result.userB.firstName} {result.userB.lastName} 
+                                    </span>
                                     <button className="info-button" onClick={() => openInfoPopup(result.userB)}>
                                         <img src="/icons/info-svgrepo-com.svg" alt="Info" className="icon-image" />
                                     </button>

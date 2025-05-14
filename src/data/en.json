@@ -115,8 +115,9 @@
 "gdpr-info": "Your responses will only be used to match you with relevant people during the event. All data will be anonymized and deleted after the event ends.",
 "back-button": "Close",
 
-"match-result":"Match result for",
+"match-result":"Your match results",
 "your-matches":"You have matched with",
+"top-matches": "Top matches",
 "with":"with",
 "points":"points",
 "info-about":"Information about",

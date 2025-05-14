@@ -206,17 +206,31 @@ function Questions({ goTo, email }) {
   <div className="options-grid">
     {currentQuestion && currentQuestion.options.map(option => (
       <div key={option} className="option">
-        <input
-          type="checkbox"
-          id={`${currentQuestion.id}-${option}`}
-          checked={answers[currentQuestion.id]?.includes(option) || false}
-          onChange={() =>
-            currentQuestion.id === 6
-              ? handleSingleCheckbox(currentQuestion.id, option)
-              : handleAnswer(currentQuestion.id, option)
-          }
-        />
-        <label htmlFor={`${currentQuestion.id}-${option}`}>{t(option)}</label>
+        {currentQuestion.id === 6 ? (
+          // Använd radio-knappar för fråga med id 6
+          <>
+            <input
+              type="radio" // Radio-knapp för att tillåta endast ett val
+              id={`${currentQuestion.id}-${option}`}
+              name={`radio-${currentQuestion.id}`} // Alla alternativ för samma fråga delar samma "name"
+              value={option}
+              checked={answers[currentQuestion.id]?.includes(option) || false}
+              onChange={() => handleSingleCheckbox(currentQuestion.id, option)}
+            />
+            <label htmlFor={`${currentQuestion.id}-${option}`}>{t(option)}</label>
+          </>
+        ) : (
+          // Använd checkboxar för andra frågor
+          <>
+            <input
+              type="checkbox"
+              id={`${currentQuestion.id}-${option}`}
+              checked={answers[currentQuestion.id]?.includes(option) || false}
+              onChange={() => handleAnswer(currentQuestion.id, option)}
+            />
+            <label htmlFor={`${currentQuestion.id}-${option}`}>{t(option)}</label>
+          </>
+        )}
       </div>
     ))}
   </div>

@@ -115,8 +115,9 @@
 "gdpr-info": "Dina svar används endast för att matcha dig med relevanta personer under evenemanget. All data anonymiseras och raderas efter evenemangets slut.",
 "back-button": "Stäng",
 
-"match-result":"Matchningsresultat för",
+"match-result":"Dina matchningsresultat",
 "your-matches":"Du har matchat med ",
+"top-matches": "Topp matchningar",
 "with":"med",
 "points":"poäng",
 "info-about":"Information om",

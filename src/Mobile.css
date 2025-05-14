@@ -181,5 +181,9 @@
         padding: 0 10px;
         flex-wrap: wrap;
       }
+      p {
+        padding: 0 30px;
+      }
+
+
   }
-  

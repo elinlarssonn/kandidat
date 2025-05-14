@@ -362,19 +362,22 @@ button:disabled {
 }
 
 .match-item {
-  align-items: center;
-  justify-content: center;
-  display: flex;
-  margin-bottom: 10px; 
-  padding: 5px;
-  font-size: 22px;
+  margin: 20px auto; /* Center horizontally */
+  display: flex; /* Ensure flex layout */
+  align-items: center; /* Align content vertically */
+  justify-content: space-between; /* Space between text and buttons */
+  text-align: left; /* Align text to the left */
+  padding: 18px 24px;
   max-width: 700px;
-  margin-left: auto;
-  margin-right: auto;
+  border-radius: 12px;
+  font-size: 22px;
+  font-weight: 600;
 }
 
 .match-item > span {
   margin-right: 15px; /* Mellanrum mellan texten och första knappen */
+  text-align: left; /* Align text to the left */
+  flex-grow: 1;/* Prevent text from stretching */
 }
 
 .info-button, .chat-button {
@@ -388,6 +391,7 @@ button:disabled {
   align-items: center;
   justify-content: center;
   background: none;
+  margin-left: auto; /* Push buttons to the right */
 }
 
 .icon-image {
@@ -421,17 +425,20 @@ button:disabled {
 }
 
 .load-more-button {
-  background-color: white;
-  color: #4CAF50;
-  border: none;
-  padding: 12px 20px;
-  border-radius: 20px;
+  background-color: transparent;
+  color: white;
+  border: 2px solid rgb(235, 234, 234);
+  padding: 6px 12px;
+  margin-bottom: 20px;
+  border-radius: 24px;
   font-size: 1rem;
   cursor: pointer;
+  transition: all 0.3s ease;
 }
 
 .load-more-button:hover {
-  background-color: #e0f2e9;
+  background-color: rgba(255, 255, 255, 0.1); /* lätt ljus overlay vid hover */
+  color: #f0f0f0;
 }
 
 .info-popup {
@@ -477,4 +484,41 @@ button:disabled {
 .language-flag {
   width: 30px; /* Justera storleken */
   height: auto;
+}
+.match-section-title {
+  font-size: 24px;
+  font-weight: 600;
+  margin: 10px 0 10px 0;
+  color: white;
+  text-align: center;
+}
+
+.match-group {
+  margin-bottom: 20px;
+}
+
+.top-matches .match-item {
+  background: linear-gradient(to right, #d3b552, #fff2b0); /* Guldskiftning */
+  color: #634b02;
+}
+
+.strong-matches .match-item {
+  background: linear-gradient(145deg,#c1c1c1, #e0e0e0, #fafafa );
+  color: #333;
+}
+
+.medium-matches .match-item {
+  background: linear-gradient(to right, #ce8842, #facc9b);
+  color: #3a2c1a;
+}
+
+
+.weak-matches .match-item {
+  background-color: #98df91;
+}
+
+.match-icon {
+  margin-right: 10px;
+  font-size: 20px;
+  vertical-align: middle;
 }

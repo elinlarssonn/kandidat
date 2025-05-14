@@ -685,8 +685,31 @@
     "userId": "anna6@gmail.com",
     "firstName": "Anna",
     "lastName": "6",
-    "answers": {},
-    "createdAt": "",
+    "answers": {
+      "1": "role-entrepreneur",
+      "2": "exp-1-3",
+      "4": [
+        "goal-recruit",
+        "goal-customers"
+      ],
+      "5": [
+        "type-senior",
+        "type-student"
+      ],
+      "6": [
+        "industry-tourism"
+      ],
+      "7": [
+        "industry-finance"
+      ],
+      "8": [
+        "skill-design"
+      ],
+      "9": [
+        "skill-finance"
+      ]
+    },
+    "createdAt": "2025-05-14T08:11:38.715Z",
     "index": 18
   },
   {
