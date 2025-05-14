@@ -362,7 +362,7 @@ button:disabled {
 }
 
 .match-item {
-  margin: 20px auto; /* Center horizontally */
+  margin: 7px auto; /* Center horizontally */
   display: flex; /* Ensure flex layout */
   align-items: center; /* Align content vertically */
   justify-content: space-between; /* Space between text and buttons */
@@ -372,12 +372,15 @@ button:disabled {
   border-radius: 12px;
   font-size: 22px;
   font-weight: 600;
+  min-height: 80px;
+  width: 320px;
 }
 
 .match-item > span {
   margin-right: 15px; /* Mellanrum mellan texten och första knappen */
   text-align: left; /* Align text to the left */
   flex-grow: 1;/* Prevent text from stretching */
+  word-break: break-word;
 }
 
 .info-button, .chat-button {
@@ -494,7 +497,12 @@ button:disabled {
 }
 
 .match-group {
-  margin-bottom: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* centrera barn horisontellt */
+  gap: 16px; /* fin spacing mellan korten */
+  padding: 0;
+  list-style: none;
 }
 
 .top-matches .match-item {
