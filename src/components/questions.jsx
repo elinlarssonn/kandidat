@@ -9,7 +9,7 @@ import en from '../data/en.json';
 function Questions({ goTo, email }) {
   const { t, language } = useLanguage();
 
-  // ✅ Ladda index från sessionStorage (för att gå till rätt fråga efter Consent)
+  // Ladda index från sessionStorage (för att gå till rätt fråga efter Consent)
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(() => {
     const savedIndex = sessionStorage.getItem('returnToQuestionIndex');
     if (savedIndex) {
@@ -19,7 +19,7 @@ function Questions({ goTo, email }) {
     return 0;
   });
 
-  // ✅ Ladda tidigare svar från sessionStorage
+  // Ladda tidigare svar från sessionStorage
   const [answers, setAnswers] = useState(() => {
     const saved = sessionStorage.getItem('savedAnswers');
     return saved ? JSON.parse(saved) : {};
@@ -28,7 +28,7 @@ function Questions({ goTo, email }) {
   const [consentApproved, setConsentApproved] = useState(false);
   const translations = { sv, en };
 
-  // ✅ Spara svar i sessionStorage vid varje ändring
+  // Spara svar i sessionStorage vid varje ändring
   useEffect(() => {
     sessionStorage.setItem('savedAnswers', JSON.stringify(answers));
   }, [answers]);

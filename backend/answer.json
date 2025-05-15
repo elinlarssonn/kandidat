@@ -90,8 +90,8 @@
   },
   {
     "userId": "Sara.movin@gmail.com",
-    "firstName": "Carolina",
-    "lastName": "Cuevas",
+    "firstName": "Saga",
+    "lastName": "Lindstedt",
     "answers": {
       "1": "role-graduate",
       "2": "exp-3-5",
@@ -880,6 +880,44 @@
       ]
     },
     "createdAt": "2025-05-15T11:18:11.924Z",
+    "index": 18
+  },
+  {
+    "userId": "carolina@cuevas.se",
+    "firstName": "Carolina",
+    "lastName": "Cuevas",
+    "answers": {
+      "1": "role-ceo",
+      "2": "exp-5-10",
+      "3": "yes",
+      "4": [
+        "goal-contacts",
+        "goal-inspiration"
+      ],
+      "5": [
+        "type-entrepreneur",
+        "type-similar-role"
+      ],
+      "6": [
+        "industry-tech"
+      ],
+      "7": [
+        "industry-tech",
+        "industry-education",
+        "industry-energy"
+      ],
+      "8": [
+        "skill-leadership",
+        "skill-development",
+        "skill-communication"
+      ],
+      "9": [
+        "skill-research",
+        "skill-development",
+        "skill-leadership"
+      ]
+    },
+    "createdAt": "2025-05-15T19:01:54.468Z",
     "index": 18
   }
 ]

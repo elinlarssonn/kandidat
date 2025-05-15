@@ -393,7 +393,7 @@ button:disabled {
   display: flex;
   align-items: center;
   justify-content: center;
-  background: none;
+  background: none !important;
   margin-left: auto; /* Push buttons to the right */
 }
 
