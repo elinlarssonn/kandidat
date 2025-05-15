@@ -95,7 +95,6 @@ function MatchResults({ goTo, userId }) {
                 {results.map((result, index) => (
                     <li key={index} className="match-item">
                         <span>
-                            <span className="match-label">★  </span>
                             {result.userB.firstName} {result.userB.lastName}
                         </span>
                         <button className="info-button" onClick={() => openInfoPopup(result.userB)}>
@@ -196,7 +195,7 @@ function MatchResults({ goTo, userId }) {
             </>
             )} 
 
-            <Button label="Uppdatera matchningar" onClick={fetchResults} />
+            <Button label={t("update-matches")} onClick={fetchResults} />
 
             {/* Popup för information */}
             {console.log("Selected User State:", selectedUser)}

@@ -127,6 +127,7 @@
 "alert-chat-two":"is opening (implement chatfunction here).",
 
 "no-matches-message": "Sorry, you have no matches right now. Check back later when more participants have responded!",
+"update-matches":"Update matches",
 "show-more-matches": "Show more matches",
 "hide-more-matches": "Hide additional matches",
 "more-strong-matches": "Additional strong matches",

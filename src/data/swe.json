@@ -127,6 +127,7 @@
 "alert-chat-two":"öppnas (implementera chattfunktion här).",
 
 "no-matches-message": "Du har tyvärr inga matchningar just nu. Kika in senare när fler deltagare har svarat!",
+"update-matches":"Uppdatera matchningar",
 "show-more-matches": "Visa fler matchningar",
 "no-extra-matches": "Det finns inga fler matchningar att visa just nu. Kolla gärna igen senare när fler har svarat!",
 "hide-more-matches": "Göm fler matchningar",
