@@ -867,5 +867,19 @@
     },
     "createdAt": "2025-05-13T14:52:27.198Z",
     "index": 18
+  },
+  {
+    "userId": "sebbe.rendel@gmail.com",
+    "firstName": "Sebbe",
+    "lastName": "Rendel",
+    "answers": {
+      "9": [
+        "skill-programming",
+        "skill-project",
+        "skill-sales"
+      ]
+    },
+    "createdAt": "2025-05-15T11:18:11.924Z",
+    "index": 18
   }
 ]

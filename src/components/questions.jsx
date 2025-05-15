@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Button from '../components/button';
 import Dropdown from 'react-bootstrap/Dropdown';
 import questions from '../data/questions_sv.json';
@@ -7,27 +7,67 @@ import sv from '../data/swe.json';
 import en from '../data/en.json';
 
 function Questions({ goTo, email }) {
-  const { t, language } = useLanguage(); 
+  const { t, language } = useLanguage();
 
-  const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
-  const [answers, setAnswers] = useState({});
-  const [consentApproved, setConsentApproved] = useState(false);
-  const translations = {
-    sv: sv,
-    en: en
-  };
-
-  React.useEffect(() => {
+  // ✅ Ladda index från sessionStorage (för att gå till rätt fråga efter Consent)
+  const [currentQuestionIndex, setCurrentQuestionIndex] = useState(() => {
     const savedIndex = sessionStorage.getItem('returnToQuestionIndex');
     if (savedIndex) {
-      setCurrentQuestionIndex(parseInt(savedIndex, 10));
-      sessionStorage.removeItem('returnToQuestionIndex'); // Rensa efter användning
+      sessionStorage.removeItem('returnToQuestionIndex');
+      return parseInt(savedIndex, 10);
     }
-  }, []);
+    return 0;
+  });
+
+  // ✅ Ladda tidigare svar från sessionStorage
+  const [answers, setAnswers] = useState(() => {
+    const saved = sessionStorage.getItem('savedAnswers');
+    return saved ? JSON.parse(saved) : {};
+  });
+
+  const [consentApproved, setConsentApproved] = useState(false);
+  const translations = { sv, en };
+
+  // ✅ Spara svar i sessionStorage vid varje ändring
+  useEffect(() => {
+    sessionStorage.setItem('savedAnswers', JSON.stringify(answers));
+  }, [answers]);
 
   const handleAnswer = (questionId, option) => {
     setAnswers(prev => {
       const currentAnswers = prev[questionId] || [];
+
+      if (questionId === 4) {
+        const isGoalNone = option === "goal-none";
+
+        if (isGoalNone) {
+          if (currentAnswers.includes("goal-none")) {
+            return {
+              ...prev,
+              [questionId]: [],
+            };
+          } else {
+            return {
+              ...prev,
+              [questionId]: ["goal-none"],
+            };
+          }
+        } else {
+          let updated = currentAnswers.filter(ans => ans !== "goal-none");
+
+          if (updated.includes(option)) {
+            updated = updated.filter(ans => ans !== option);
+          } else if (updated.length < 3) {
+            updated = [...updated, option];
+          }
+
+          return {
+            ...prev,
+            [questionId]: updated,
+          };
+        }
+      }
+
       if (currentAnswers.includes(option)) {
         return {
           ...prev,
@@ -107,20 +147,19 @@ function Questions({ goTo, email }) {
           onClick={() => setCurrentQuestionIndex(0)}
           index={1}
         />
-        
+
         {remainingQuestions.map((question, i) => (
-        <QuestionProgressCircleRow
-          key={question.id}
-          questions={[question]}
-          active={currentQuestionIndex === i + 1}
-          answered={answers[question.id] !== undefined}
-          onClick={() => setCurrentQuestionIndex(i + 1)}
-          index={i + 2}
-        />
+          <QuestionProgressCircleRow
+            key={question.id}
+            questions={[question]}
+            active={currentQuestionIndex === i + 1}
+            answered={answers[question.id] !== undefined}
+            onClick={() => setCurrentQuestionIndex(i + 1)}
+            index={i + 2}
+          />
         ))}
       </div>
-      
-      
+
       <h1>{t("fill-in-answers")}</h1>
 
       {currentQuestionIndex === 0 ? (
@@ -157,7 +196,7 @@ function Questions({ goTo, email }) {
               ) : (
                 <Dropdown>
                   <Dropdown.Toggle variant="success" id="dropdown-basic">
-                  {answers[q.id] ? t(answers[q.id]) :  t("choose-option")}
+                    {answers[q.id] ? t(answers[q.id]) : t("choose-option")}
                   </Dropdown.Toggle>
                   <Dropdown.Menu align="start">
                     {q.options.map(option => (
@@ -198,66 +237,72 @@ function Questions({ goTo, email }) {
         </div>
       ) : (
         <div className="question">
-<div className="question-text">
-  {currentQuestion && <p>{t(currentQuestion.question)}</p>}
-</div>
+          <div className="question-text">
+            {currentQuestion && <p>{t(currentQuestion.question)}</p>}
+          </div>
 
-<div className="answer-options">
-  <div className="options-grid">
-    {currentQuestion && currentQuestion.options.map(option => (
-      <div key={option} className="option">
-        {currentQuestion.id === 6 ? (
-          // Använd radio-knappar för fråga med id 6
-          <>
-            <input
-              type="radio" // Radio-knapp för att tillåta endast ett val
-              id={`${currentQuestion.id}-${option}`}
-              name={`radio-${currentQuestion.id}`} // Alla alternativ för samma fråga delar samma "name"
-              value={option}
-              checked={answers[currentQuestion.id]?.includes(option) || false}
-              onChange={() => handleSingleCheckbox(currentQuestion.id, option)}
-            />
-            <label htmlFor={`${currentQuestion.id}-${option}`}>{t(option)}</label>
-          </>
-        ) : (
-          // Använd checkboxar för andra frågor
-          <>
-            <input
-              type="checkbox"
-              id={`${currentQuestion.id}-${option}`}
-              checked={answers[currentQuestion.id]?.includes(option) || false}
-              onChange={() => handleAnswer(currentQuestion.id, option)}
-            />
-            <label htmlFor={`${currentQuestion.id}-${option}`}>{t(option)}</label>
-          </>
-        )}
-      </div>
-    ))}
-  </div>
-</div>
+          <div className="answer-options">
+            <div className="options-grid">
+              {currentQuestion && currentQuestion.options.map(option => {
+                const isDisabled =
+                  currentQuestion.id === 4 &&
+                  answers[4]?.includes("goal-none") &&
+                  option !== "goal-none";
 
-  {currentQuestionIndex === remainingQuestions.length && (
-    <div className="consent-section">
-      <p className="consent-link-text">
-        {t("read-more-gdpr")}{" "}
-        <span
-          className="consent-link"
-          onClick={() => goTo(5)}
-        >
-          {t("read-more-here")}
-        </span>
-      </p>
-      <div className="checkbox-container">
-        <input
-          type="checkbox"
-          id="consent-approved"
-          checked={consentApproved}
-          onChange={() => setConsentApproved(!consentApproved)}
-        />
-        <label htmlFor="consent-approved">{t("approve-consent")}</label>
-      </div>
-    </div>
-  )}
+                return (
+                  <div key={option} className="option">
+                    {currentQuestion.id === 6 ? (
+                      <>
+                        <input
+                          type="radio"
+                          id={`${currentQuestion.id}-${option}`}
+                          name={`radio-${currentQuestion.id}`}
+                          value={option}
+                          checked={answers[currentQuestion.id]?.includes(option) || false}
+                          onChange={() => handleSingleCheckbox(currentQuestion.id, option)}
+                        />
+                        <label htmlFor={`${currentQuestion.id}-${option}`}>{t(option)}</label>
+                      </>
+                    ) : (
+                      <>
+                        <input
+                          type="checkbox"
+                          id={`${currentQuestion.id}-${option}`}
+                          checked={answers[currentQuestion.id]?.includes(option) || false}
+                          onChange={() => handleAnswer(currentQuestion.id, option)}
+                          disabled={isDisabled}
+                        />
+                        <label htmlFor={`${currentQuestion.id}-${option}`}>{t(option)}</label>
+                      </>
+                    )}
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+
+          {currentQuestionIndex === remainingQuestions.length && (
+            <div className="consent-section">
+              <p className="consent-link-text">
+                {t("read-more-gdpr")}{" "}
+                <span
+                  className="consent-link"
+                  onClick={() => goTo(5)}
+                >
+                  {t("read-more-here")}
+                </span>
+              </p>
+              <div className="checkbox-container">
+                <input
+                  type="checkbox"
+                  id="consent-approved"
+                  checked={consentApproved}
+                  onChange={() => setConsentApproved(!consentApproved)}
+                />
+                <label htmlFor="consent-approved">{t("approve-consent")}</label>
+              </div>
+            </div>
+          )}
 
           <Button
             label={currentQuestionIndex <= remainingQuestions.length - 1 ? t("next-question") : t("submit")}
@@ -280,6 +325,5 @@ function QuestionProgressCircleRow({ questions, active, answered, onClick, index
     </button>
   );
 }
-
 
 export default Questions;
