@@ -61,7 +61,7 @@ function Home() {
   
 
 function StartPage({ goTo }) {
-  const { t, setLanguage } = useLanguage();
+  const { t } = useLanguage();
   return (
     <div className="start-content">
       <h1>{t("question-about-you")}</h1>
@@ -99,7 +99,7 @@ function Consent({ goTo }) {
   );
 }
 function User({ goTo, setEmail }) {
-    const { t, setLanguage } = useLanguage();
+    const { t } = useLanguage();
     const [localEmail, setLocalEmail] = useState(''); // Lokal state för mejladressen
     const [errorMessage, setErrorMessage] = useState("");
 
