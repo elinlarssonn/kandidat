@@ -487,34 +487,29 @@
     "firstName": "Angelica",
     "lastName": "Södertörn",
     "answers": {
-      "1": "role-consultant",
-      "2": "exp-3-5",
+      "1": "role-recruiter",
+      "2": "exp-1-3",
       "3": "yes",
       "4": [
-        "goal-job",
-        "goal-inspiration"
+        "goal-customers"
       ],
       "5": [
-        "type-senior",
-        "type-none"
+        "type-ceo"
       ],
       "6": [
-        "industry-energy",
         "industry-construction"
       ],
       "7": [
-        "industry-energy"
+        "industry-construction"
       ],
       "8": [
-        "skill-analysis",
-        "skill-communication"
+        "skill-copywriting"
       ],
       "9": [
-        "skill-research",
-        "skill-development"
+        "skill-copywriting"
       ]
     },
-    "createdAt": "2025-05-08T20:20:00.000Z",
+    "createdAt": "2025-05-15T09:21:42.852Z",
     "index": 17
   },
   {

@@ -348,40 +348,6 @@ app.get('/match-rest', (req, res) => {
     });
   });
 
-// Endpoint för att dynamiskt uppdatera matchningar för alla personer
-app.get('/match-all-dynamic', (req, res) => {
-    const userId = req.query.userId; // Hämta userId från förfrågan
-    if (!userId) {
-        return res.status(400).send('UserId krävs för att hämta matchningar.');
-    }
-
-    fs.readFile(DATA_FILE, 'utf8', (err, data) => {
-        if (err) {
-            return res.status(500).send('Kunde inte läsa svaren.');
-        }
-
-        const answers = JSON.parse(data || '[]');
-        const matchResults = [];
-
-        // Iterera över alla kombinationer av personer
-        for (let i = 0; i < answers.length; i++) {
-            const personA = answers[i];
-            if (personA.userId !== userId) continue; // Endast matchningar för det angivna userId
-
-            for (let j = 0; j < answers.length; j++) {
-                if (i === j) continue; // Hoppa över samma person
-                const personB = answers[j];
-                const matchScore = calculateMatchScore(personA, personB);
-
-                matchResults.push({
-                    userA: personA.userId,
-                    userB: personB.userId,
-                    matchScore,
-                });
-            }
-        }
-    });
-});
 
 app.listen(5001, () => {
     console.log('Servern körs på http://localhost:5001');

@@ -281,28 +281,5 @@ function QuestionProgressCircleRow({ questions, active, answered, onClick, index
   );
 }
 
-function QuestionProgress({remainingQuestions, current, answers, onNavigate }) {
-  const totalSteps = 1 + remainingQuestions.length; // första sidan + resten
-
-  return (
-    <div className="question-progress">
-      {remainingQuestions.map((question, index) => {
-        const isAnswered = answers[question.id];
-        const isCurrent = index === current;
-
-        return (
-          <button
-            key={index}
-            className={`step-circle ${isCurrent ? "current" : ""} ${isAnswered ? "answered" : ""}`}
-            onClick={() => onNavigate(index)}
-          >
-            {isAnswered ? "✓" : index + 1}
-          </button>
-        );
-      })}
-    </div>
-  );
-}
-
 
 export default Questions;
